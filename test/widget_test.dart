@@ -13,7 +13,12 @@ import 'package:musice/main.dart';
 void main() {
   testWidgets('App builds and shows core controls', (WidgetTester tester) async {
     await tester.pumpWidget(const RadioApp());
-    // Basic smoke checks
+
+    // Advance time to pass the splash screen delay and navigate to home
+    await tester.pump(const Duration(milliseconds: 1300));
+    await tester.pumpAndSettle();
+
+    // Basic smoke checks on the home screen
     expect(find.byIcon(Icons.podcasts), findsOneWidget);
     expect(find.byType(Slider), findsOneWidget);
   });

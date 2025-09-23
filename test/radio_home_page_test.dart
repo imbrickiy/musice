@@ -6,6 +6,10 @@ void main() {
   testWidgets('RadioHomePage opens station picker modal', (tester) async {
     await tester.pumpWidget(const RadioApp());
 
+    // Wait for splash screen to navigate to home
+    await tester.pump(const Duration(milliseconds: 1300));
+    await tester.pumpAndSettle();
+
     // Header shows current station name
     expect(find.text('Deep'), findsOneWidget);
 
@@ -19,6 +23,10 @@ void main() {
 
   testWidgets('Selecting a station does not switch to pause immediately', (tester) async {
     await tester.pumpWidget(const RadioApp());
+
+    // Wait for splash screen to navigate to home
+    await tester.pump(const Duration(milliseconds: 1300));
+    await tester.pumpAndSettle();
 
     // Open station picker
     await tester.tap(find.byIcon(Icons.podcasts));

@@ -53,13 +53,81 @@ class RadioApp extends StatelessWidget {
         bodyMedium: base.textTheme.bodyMedium?.copyWith(height: 1.2),
       ),
       dividerColor: Colors.white24,
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white70,
+        elevation: 0,
+        focusElevation: 0,
+        hoverElevation: 0,
+        disabledElevation: 0,
+        shape: CircleBorder(
+          side: BorderSide(color: Colors.white24, width: 1),
+        ),
+      ),
     );
 
     return MaterialApp(
       navigatorKey: appNavigatorKey,
       debugShowCheckedModeBanner: false,
       theme: theme,
-      home: const RadioHomePage(),
+      home: const SplashScreen(),
+    );
+  }
+}
+
+// Simple splash/loader screen shown at app startup
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Small delay to show the loader, then navigate to the home page
+    Future<void>.delayed(const Duration(milliseconds: 1200), () {
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const RadioHomePage()),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // App name / logo placeholder
+              Text(
+                'Musice',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Loader indicator
+              const SizedBox(
+                width: 28,
+                height: 28,
+                child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white70),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -216,6 +284,23 @@ class _RadioHomePageState extends State<RadioHomePage> with SingleTickerProvider
     // playerStateStream will update UI to not playing and stop waves
   }
 
+  void _showAbout() {
+    if (!mounted) return;
+    showModalBottomSheet<void>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      backgroundColor: Colors.black,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => const _AboutSheet(
+        appName: 'Musice',
+        version: '1.0.0',
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _playerStateSub?.cancel();
@@ -227,6 +312,12 @@ class _RadioHomePageState extends State<RadioHomePage> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'О приложении',
+        onPressed: _showAbout,
+        child: const Icon(Icons.info_outline),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -266,6 +357,46 @@ class _RadioHomePageState extends State<RadioHomePage> with SingleTickerProvider
                 });
               },
               onAnimated: (v) => _player.setVolume(v),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AboutSheet extends StatelessWidget {
+  final String appName;
+  final String version;
+  const _AboutSheet({required this.appName, required this.version});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 8),
+            Text(
+              'Слушайте любимые станции и управляйте громкостью в реальном времени.',
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white70, height: 1.25),
+            ),
+            const SizedBox(height: 8),
+            Center(
+              child: Text('imbrickiy © 2025',
+                  style: theme.textTheme.bodySmall?.copyWith(color: Colors.white54)),
+            ),
+            const SizedBox(height: 8),
+            Center(
+              child: Text('$appName v$version',
+                  style: theme.textTheme.bodySmall?.copyWith(color: Colors.white54)),
             ),
           ],
         ),
