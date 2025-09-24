@@ -10,6 +10,7 @@ import 'package:musice/widgets/station_picker_sheet.dart';
 import 'package:musice/models/station.dart';
 import 'dart:async';
 import 'package:musice/constants/app_constants.dart';
+import 'package:musice/widgets/about_sheet.dart';
 
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -143,8 +144,7 @@ class RadioHomePage extends StatefulWidget {
 class _RadioHomePageState extends State<RadioHomePage> with SingleTickerProviderStateMixin {
   final AudioPlayer _player = AudioPlayer();
 
-  String? selectedStationName = "Deep";
-  String? selectedStationUrl = "https://hls-01-radiorecord.hostingradio.ru/record-deep/playlist.m3u8";
+  Station? _selected; // consolidated selected station
 
   // Available stations for selection
   final List<Station> _stations = kStations;
@@ -168,6 +168,7 @@ class _RadioHomePageState extends State<RadioHomePage> with SingleTickerProvider
   @override
   void initState() {
     super.initState();
+    _selected = _stations.isNotEmpty ? _stations.first : null;
     _player.setVolume(volume);
     _reactCtrl = AnimationController(vsync: this, duration: kReactionDuration)
       ..addListener(() {
@@ -192,7 +193,7 @@ class _RadioHomePageState extends State<RadioHomePage> with SingleTickerProvider
 
   // Show station picker modal
   Future<void> _showStationPicker() async {
-    final current = selectedStationName;
+    final current = _selected?.name;
 
     // If the widget is no longer mounted, do not proceed.
     if (!mounted) return;
@@ -253,15 +254,12 @@ class _RadioHomePageState extends State<RadioHomePage> with SingleTickerProvider
     if (chosen != null) {
       // Update station selection.
       setState(() {
-        selectedStationName = chosen!.name;
-        selectedStationUrl = chosen.url;
+        _selected = chosen;
       });
       // Start playing the newly selected station.
       await _startStation(chosen.url);
     }
   }
-
-
 
   Future<void> _startStation(String url) async {
     try {
@@ -290,7 +288,7 @@ class _RadioHomePageState extends State<RadioHomePage> with SingleTickerProvider
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(kDefaultRadius)),
       ),
-      builder: (context) => const _AboutSheet(
+      builder: (context) => const AboutSheet(
         appName: kAppName,
         version: kAppVersion,
       ),
@@ -320,10 +318,16 @@ class _RadioHomePageState extends State<RadioHomePage> with SingleTickerProvider
           children: [
             // Header
             RadioHeader(
-              title: selectedStationName ?? "Select a station",
+
               onStationsTap: _showStationPicker,
             ),
-
+            Text(
+              _selected?.name ?? "Select a station",
+              style: const TextStyle(
+                  fontSize: kHeaderTitleFontSize,
+                  fontWeight: kHeaderTitleFontWeight
+              ),
+            ),
             // Play Button Section
             Expanded(
               child: PlaySection(
@@ -333,8 +337,9 @@ class _RadioHomePageState extends State<RadioHomePage> with SingleTickerProvider
                 reactiveLevel: _reactiveLevel,
                 onPlay: () {
                   if (_isLoading) return; // ignore while loading
-                  if (selectedStationUrl != null) {
-                    _startStation(selectedStationUrl!);
+                  final url = _selected?.url;
+                  if (url != null) {
+                    _startStation(url);
                   }
                 },
                 onPause: () {
@@ -361,42 +366,3 @@ class _RadioHomePageState extends State<RadioHomePage> with SingleTickerProvider
   }
 }
 
-class _AboutSheet extends StatelessWidget {
-  final String appName;
-  final String version;
-  const _AboutSheet({required this.appName, required this.version});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(kDefaultPadding, kDefaultPadding, kDefaultPadding, kDefaultPadding),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 8),
-            Text(
-              'Слушайте любимые станции и управляйте громкостью в реальном времени.',
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white70, height: 1.25),
-            ),
-            const SizedBox(height: 8),
-            Center(
-              child: Text(kCopyright,
-                  style: theme.textTheme.bodySmall?.copyWith(color: Colors.white54)),
-            ),
-            const SizedBox(height: 8),
-            Center(
-              child: Text('$appName v$version',
-                  style: theme.textTheme.bodySmall?.copyWith(color: Colors.white54)),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

@@ -5,7 +5,11 @@ import 'package:musice/models/station.dart';
 const Size kWindowSize = Size(390, 844);
 
 // Colors
-const Color kSeedColor = Color(0xFF7C4DFF);
+const Color kSeedColor = Color(0xFFF65500);
+const Color kPrimaryColor = Color(0xFFF65500);
+const Color kOnPrimaryColor = Colors.white;
+const Color kSecondaryColor = Color(0x212121FF);
+const Color kBackgroundColor = Color(0xFF0B0B0D);
 const Color kScaffoldBackgroundColor = Color(0xFF0B0B0D);
 const Color kIconColor = Colors.white70;
 const Color kDividerColor = Colors.white24;
@@ -28,6 +32,8 @@ const List<Station> kStations = [
   Station('Chill-Out', 'https://hls-01-radiorecord.hostingradio.ru/record-chil/playlist.m3u8'),
   Station('Ambient', 'https://hls-01-radiorecord.hostingradio.ru/record-ambient/playlist.m3u8'),
   Station('Power Deep', 'https://listen.powerapp.com.tr/powerdeep/abr/playlist.m3u8'),
+  Station('Business FM SPb', 'https://bfmreg.hostingradio.ru/spb.bfm128.mp3'),
+  Station('Business FM', 'https://bfm.hostingradio.ru/bfm256.mp3'),
 ];
 
 // UI

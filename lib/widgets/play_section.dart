@@ -53,17 +53,22 @@ class PlaySection extends StatelessWidget {
             ),
             AbsorbPointer(
               absorbing: isLoading,
-              child: GestureDetector(
-                onTap: () => isPlaying ? onPause() : onPlay(),
-                child: Container(
-                  height: kPlayInnerSize,
-                  width: kPlayInnerSize,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: kPlayBorderColor, width: kPlayBorderWidth),
+              child: Semantics(
+                button: true,
+                enabled: !isLoading,
+                label: isPlaying ? 'Pause' : 'Play',
+                child: GestureDetector(
+                  onTap: () => isPlaying ? onPause() : onPlay(),
+                  child: Container(
+                    height: kPlayInnerSize,
+                    width: kPlayInnerSize,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: kPlayBorderColor, width: kPlayBorderWidth),
+                    ),
+                    alignment: Alignment.center,
+                    child: iconWidget,
                   ),
-                  alignment: Alignment.center,
-                  child: iconWidget,
                 ),
               ),
             ),

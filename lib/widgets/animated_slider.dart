@@ -15,6 +15,7 @@ class _AnimatedSliderState extends State<AnimatedSlider> with SingleTickerProvid
   late AnimationController _controller;
   late Animation<double> _animation;
   late double _current;
+  VoidCallback? _onTick;
 
   @override
   void initState() {
@@ -28,23 +29,34 @@ class _AnimatedSliderState extends State<AnimatedSlider> with SingleTickerProvid
   void didUpdateWidget(covariant AnimatedSlider oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.value != widget.value) {
+      // Stop any in-flight animation and detach previous listener, if any.
       _controller.stop();
+      if (_onTick != null) {
+        _animation.removeListener(_onTick!);
+      }
+
+      // Animate smoothly from current visual value to the new target value.
       _animation = Tween<double>(begin: _current, end: widget.value)
           .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
-      _animation.addListener(() {
+
+      _onTick = () {
         setState(() {
           _current = _animation.value;
         });
         if (widget.onAnimated != null) {
           widget.onAnimated!(_current);
         }
-      });
+      };
+      _animation.addListener(_onTick!);
       _controller.forward(from: 0);
     }
   }
 
   @override
   void dispose() {
+    if (_onTick != null) {
+      _animation.removeListener(_onTick!);
+    }
     _controller.dispose();
     super.dispose();
   }
@@ -53,10 +65,15 @@ class _AnimatedSliderState extends State<AnimatedSlider> with SingleTickerProvid
   Widget build(BuildContext context) {
     return Slider(
       value: _current,
-      onChanged: widget.onChanged,
+      onChanged: (v) {
+        // Immediately reflect drag position for responsive feel
+        setState(() {
+          _current = v;
+        });
+        widget.onChanged(v);
+      },
       min: 0,
       max: 1,
     );
   }
 }
-
