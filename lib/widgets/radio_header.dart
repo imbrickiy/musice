@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musice/constants/app_constants.dart';
 
 class RadioHeader extends StatelessWidget {
   final String title;
@@ -8,11 +9,17 @@ class RadioHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: kHeaderHPad, vertical: kHeaderVPad),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400)),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: kHeaderTitleFontSize,
+              fontWeight: kHeaderTitleFontWeight,
+            ),
+          ),
           Material(
             type: MaterialType.transparency,
             child: InkWell(
@@ -20,10 +27,10 @@ class RadioHeader extends StatelessWidget {
               customBorder: const CircleBorder(),
               onTap: onStationsTap,
               child: const SizedBox(
-                width: 56,
-                height: 56,
+                width: kHeaderButtonSize,
+                height: kHeaderButtonSize,
                 child: Center(
-                  child: Icon(Icons.podcasts, size: 28),
+                  child: Icon(Icons.podcasts, size: kHeaderIconSize, color: kIconColor),
                 ),
               ),
             ),

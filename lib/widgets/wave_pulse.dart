@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musice/constants/app_constants.dart';
 
 class WavePulse extends StatefulWidget {
   final bool active;
@@ -29,7 +30,7 @@ class _WavePulseState extends State<WavePulse> with SingleTickerProviderStateMix
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _controller = AnimationController(vsync: this, duration: kWaveAnimDuration);
     if (widget.active) _controller.repeat();
   }
 

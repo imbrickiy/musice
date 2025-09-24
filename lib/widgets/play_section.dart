@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musice/widgets/wave_pulse.dart';
+import 'package:musice/constants/app_constants.dart';
 
 class PlaySection extends StatelessWidget {
   final bool isPlaying;
@@ -22,29 +23,29 @@ class PlaySection extends StatelessWidget {
   Widget build(BuildContext context) {
     final iconWidget = isLoading
         ? const SizedBox(
-            width: 28,
-            height: 28,
-            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white70),
+            width: kLoaderSize,
+            height: kLoaderSize,
+            child: CircularProgressIndicator(strokeWidth: 2, color: kIconColor),
           )
         : Icon(
             isPlaying ? Icons.pause : Icons.play_arrow,
-            size: 64,
-            color: Colors.white70,
+            size: kPlayIconSize,
+            color: kIconColor,
           );
 
     return Center(
       child: SizedBox(
-        height: 240,
-        width: 240,
+        height: kPlayOuterSize,
+        width: kPlayOuterSize,
         child: Stack(
           alignment: Alignment.center,
           children: [
             RepaintBoundary(
               child: WavePulse(
                 active: isPlaying,
-                waves: 3,
-                color: Colors.white,
-                strokeWidth: 1.0,
+                waves: kWaveCount,
+                color: kWaveColor,
+                strokeWidth: kWaveStrokeWidth,
                 intensity: volume,
                 reactiveLevel: reactiveLevel,
                 glow: true,
@@ -55,11 +56,11 @@ class PlaySection extends StatelessWidget {
               child: GestureDetector(
                 onTap: () => isPlaying ? onPause() : onPlay(),
                 child: Container(
-                  height: 140,
-                  width: 140,
+                  height: kPlayInnerSize,
+                  width: kPlayInnerSize,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white24, width: 1),
+                    border: Border.all(color: kPlayBorderColor, width: kPlayBorderWidth),
                   ),
                   alignment: Alignment.center,
                   child: iconWidget,

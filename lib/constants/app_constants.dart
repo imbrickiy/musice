@@ -15,6 +15,7 @@ const Color kBorderColor = Colors.white24;
 const Duration kSplashDuration = Duration(milliseconds: 1200);
 const Duration kReactionDuration = Duration(milliseconds: 900);
 const Duration kAnimationDuration = Duration(milliseconds: 180);
+const Duration kWaveAnimDuration = Duration(seconds: 2);
 
 // App Info
 const String kAppName = 'Musice';
@@ -42,3 +43,35 @@ const EdgeInsets kSheetTitlePadding = EdgeInsets.symmetric(vertical: 12);
 const TextStyle kSheetTitleTextStyle = TextStyle(color: kIconColor, fontSize: 16, fontWeight: FontWeight.w500);
 const Color kSheetDividerColor = Colors.white12;
 const TextStyle kSheetListTileTextStyle = TextStyle(color: Colors.white);
+
+// Header
+const double kHeaderHPad = 20.0;
+const double kHeaderVPad = 20.0;
+const double kHeaderTitleFontSize = 20.0;
+const FontWeight kHeaderTitleFontWeight = FontWeight.w400;
+const double kHeaderButtonSize = 56.0;
+const double kHeaderIconSize = 28.0;
+
+// Play section
+const double kPlayOuterSize = 240.0;
+const double kPlayInnerSize = 140.0;
+const double kPlayIconSize = 64.0;
+const double kLoaderSize = 28.0;
+const double kPlayBorderWidth = 1.0;
+const Color kPlayBorderColor = kBorderColor;
+const int kWaveCount = 3;
+const double kWaveStrokeWidth = 1.0;
+const Color kWaveColor = Colors.white;
+
+// Volume section
+const double kVolumeSectionBottomPadding = 40.0;
+const double kVolumeControlHeight = 140.0;
+const double kVolumeLabelFontSize = 13.0;
+const double kVolumeLabelLetterSpacing = 4.0;
+const FontWeight kVolumeLabelFontWeight = FontWeight.w400;
+const double kSliderTrackHeight = 3.0;
+const Color kSliderActiveTrackColor = Colors.white;
+const Color kSliderInactiveTrackColor = Colors.white54;
+const Color kSliderThumbColor = Colors.transparent;
+const Color kSliderOverlayColor = Colors.white24;
+
