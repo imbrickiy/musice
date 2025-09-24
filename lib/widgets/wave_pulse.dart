@@ -1,3 +1,4 @@
+// A widget that displays animated pulsing waves, optionally reactive to audio input.
 import 'package:flutter/material.dart';
 import 'package:musice/constants/app_constants.dart';
 
@@ -13,7 +14,7 @@ class WavePulse extends StatefulWidget {
     super.key,
     required this.active,
     this.waves = 3,
-    this.color = Colors.white,
+    this.color = AppColors.white,
     this.strokeWidth = 1.0,
     this.intensity = 0.5,
     this.reactiveLevel,
