@@ -1,7 +1,8 @@
-// Play button with wave pulse animation
 import 'package:flutter/material.dart';
 import 'package:musice/widgets/wave_pulse.dart';
 import 'package:musice/constants/app_constants.dart';
+import 'package:musice/icons/app_icons.dart';
+import 'package:musice/l10n/app_localizations.dart';
 
 class PlaySection extends StatelessWidget {
   final bool isPlaying;
@@ -24,35 +25,31 @@ class PlaySection extends StatelessWidget {
   Widget build(BuildContext context) {
     final iconWidget = isLoading
         ? const SizedBox(
-            width: AppDimens.iconM,
-            height: AppDimens.iconM,
-            child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.white70),
+            width: kLoaderSize,
+            height: kLoaderSize,
+            child: CircularProgressIndicator(strokeWidth: 2, color: kIconColor),
           )
-        : const Icon(
-            Icons.pause, // will be overridden below based on isPlaying
-            size: AppDimens.iconXL,
-            color: AppColors.white70,
+        : Icon(
+            isPlaying ? AppIcons.pause : AppIcons.play,
+            size: kPlayIconSize,
+            color: kIconColor,
           );
 
-    final Widget playIcon = Icon(
-      isPlaying ? Icons.pause : Icons.play_arrow,
-      size: AppDimens.iconXL,
-      color: AppColors.white70,
-    );
+    final l10n = AppLocalizations.of(context)!;
 
     return Center(
       child: SizedBox(
-        height: AppDimens.playArea,
-        width: AppDimens.playArea,
+        height: kPlayOuterSize,
+        width: kPlayOuterSize,
         child: Stack(
           alignment: Alignment.center,
           children: [
             RepaintBoundary(
               child: WavePulse(
                 active: isPlaying,
-                waves: 3,
-                color: AppColors.white,
-                strokeWidth: AppDimens.borderThin,
+                waves: kWaveCount,
+                color: kWaveColor,
+                strokeWidth: kWaveStrokeWidth,
                 intensity: volume,
                 reactiveLevel: reactiveLevel,
                 glow: true,
@@ -60,17 +57,22 @@ class PlaySection extends StatelessWidget {
             ),
             AbsorbPointer(
               absorbing: isLoading,
-              child: GestureDetector(
-                onTap: () => isPlaying ? onPause() : onPlay(),
-                child: Container(
-                  height: AppDimens.controlL,
-                  width: AppDimens.controlL,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.white24, width: AppDimens.borderThin),
+              child: Semantics(
+                button: true,
+                enabled: !isLoading,
+                label: isPlaying ? l10n.pause : l10n.play,
+                child: GestureDetector(
+                  onTap: () => isPlaying ? onPause() : onPlay(),
+                  child: Container(
+                    height: kPlayInnerSize,
+                    width: kPlayInnerSize,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: kPlayBorderColor, width: kPlayBorderWidth),
+                    ),
+                    alignment: Alignment.center,
+                    child: iconWidget,
                   ),
-                  alignment: Alignment.center,
-                  child: isLoading ? iconWidget : playIcon,
                 ),
               ),
             ),

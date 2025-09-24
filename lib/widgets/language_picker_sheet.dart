@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:musice/models/station.dart';
 import 'package:musice/constants/app_constants.dart';
 import 'package:musice/l10n/app_localizations.dart';
 import 'package:musice/icons/app_icons.dart';
 
-class StationPickerSheet extends StatelessWidget {
-  final List<Station> stations;
-  final String? current;
-  const StationPickerSheet({super.key, required this.stations, required this.current});
+class LanguagePickerSheet extends StatelessWidget {
+  final Locale? current;
+  const LanguagePickerSheet({super.key, required this.current});
 
   @override
   Widget build(BuildContext context) {
-    final sheetMaxHeight = MediaQuery.of(context).size.height * 0.6;
     final l10n = AppLocalizations.of(context)!;
+    final options = <_LangOption>[
+      _LangOption(null, l10n.systemDefault),
+      _LangOption(const Locale('en'), l10n.languageEnglish),
+      _LangOption(const Locale('ru'), l10n.languageRussian),
+    ];
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(kDefaultPadding),
@@ -38,25 +40,23 @@ class StationPickerSheet extends StatelessWidget {
               Padding(
                 padding: kSheetTitlePadding,
                 child: Text(
-                  l10n.selectStation,
+                  l10n.language,
                   style: kSheetTitleTextStyle,
                 ),
               ),
-              ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: sheetMaxHeight),
-                child: ListView.separated(
-                  itemCount: stations.length,
-                  separatorBuilder: (_, i) => const Divider(height: 1, color: kSheetDividerColor),
-                  itemBuilder: (context, index) {
-                    final s = stations[index];
-                    final selected = s.name == current;
-                    return ListTile(
-                      title: Text(s.name, style: kSheetListTileTextStyle),
-                      trailing: selected ? const Icon(AppIcons.check, color: kIconColor) : null,
-                      onTap: () => Navigator.of(context).pop(s),
-                    );
-                  },
-                ),
+              ListView.separated(
+                shrinkWrap: true,
+                itemCount: options.length,
+                separatorBuilder: (_, i) => const Divider(height: 1, color: kSheetDividerColor),
+                itemBuilder: (context, index) {
+                  final opt = options[index];
+                  final selected = (opt.locale == null && current == null) || (opt.locale?.languageCode == current?.languageCode);
+                  return ListTile(
+                    title: Text(opt.label, style: kSheetListTileTextStyle),
+                    trailing: selected ? const Icon(AppIcons.check, color: kIconColor) : null,
+                    onTap: () => Navigator.of(context).pop(opt.locale),
+                  );
+                },
               ),
             ],
           ),
@@ -64,4 +64,10 @@ class StationPickerSheet extends StatelessWidget {
       ),
     );
   }
+}
+
+class _LangOption {
+  final Locale? locale;
+  final String label;
+  const _LangOption(this.locale, this.label);
 }

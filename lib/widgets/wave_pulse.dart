@@ -14,7 +14,7 @@ class WavePulse extends StatefulWidget {
     super.key,
     required this.active,
     this.waves = 3,
-    this.color = AppColors.white,
+    this.color = Colors.white,
     this.strokeWidth = 1.0,
     this.intensity = 0.5,
     this.reactiveLevel,
@@ -31,7 +31,7 @@ class _WavePulseState extends State<WavePulse> with SingleTickerProviderStateMix
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _controller = AnimationController(vsync: this, duration: kWaveAnimDuration);
     if (widget.active) _controller.repeat();
   }
 
