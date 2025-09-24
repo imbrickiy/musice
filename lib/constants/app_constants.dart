@@ -1,83 +1,263 @@
+// Centralized UI constants: colors, spacing, radii, fonts, typography, dimens, buttons
+// Keep all design tokens in one place for easy maintenance.
 import 'package:flutter/material.dart';
-import 'package:musice/models/station.dart';
 
-// Window
-const Size kWindowSize = Size(390, 844);
+class AppColors {
+  // Brand/seed
+  static const Color accent = Color(0xFFFC5800);
 
-// Colors
-const Color kSeedColor = Color(0xFFF65500);
-const Color kPrimaryColor = Color(0xFFF65500);
-const Color kOnPrimaryColor = Colors.white;
-const Color kSecondaryColor = Color(0x00000090);
-const Color kBackgroundColor = Color(0xFF0B0B0D);
-const Color kScaffoldBackgroundColor = Color(0xFF0B0B0D);
-const Color kIconColor = Colors.white70;
-const Color kDividerColor = Colors.white24;
-const Color kBorderColor = Colors.white24;
+  // Surfaces
+  static const Color background = Color(0xFF0B0B0D);
+  static const Color black = Colors.black;
 
-// Durations
-const Duration kSplashDuration = Duration(milliseconds: 1200);
-const Duration kReactionDuration = Duration(milliseconds: 900);
-const Duration kAnimationDuration = Duration(milliseconds: 180);
-const Duration kWaveAnimDuration = Duration(seconds: 2);
+  // Text/icons
+  static const Color white = Colors.white;
+  static const Color white70 = Colors.white70;
+  static const Color white54 = Colors.white54;
 
-// App Info
-const String kAppName = 'Musice';
-const String kAppVersion = '1.0.0';
-const String kCopyright = 'imbrickiy © 2025';
+  // Strokes/dividers/overlays
+  static const Color white24 = Colors.white24;
+  static const Color white12 = Colors.white12;
+  static const Color transparent = Colors.transparent;
 
-// Stations
-const List<Station> kStations = [
-  Station('Deep', 'https://hls-01-radiorecord.hostingradio.ru/record-deep/playlist.m3u8'),
-  Station('Chill-Out', 'https://hls-01-radiorecord.hostingradio.ru/record-chil/playlist.m3u8'),
-  Station('Ambient', 'https://hls-01-radiorecord.hostingradio.ru/record-ambient/playlist.m3u8'),
-  Station('Power Deep', 'https://listen.powerapp.com.tr/powerdeep/abr/playlist.m3u8'),
-  Station('Business FM SPb', 'https://bfmreg.hostingradio.ru/spb.bfm128.mp3'),
-  Station('Business FM', 'https://bfm.hostingradio.ru/bfm256.mp3'),
-];
+  // Semantic aliases
+  static const Color icon = white70;
+  static const Color divider = white24;
+  static const Color stroke = white24;
+}
 
-// UI
-const double kDefaultPadding = 16.0;
-const double kDefaultRadius = 16.0;
+class AppSpacing {
+  static const double xs = 4;
+  static const double s = 8;
+  static const double sm = 12;
+  static const double m = 16;
+  static const double l = 20;
+  static const double xl = 24;
+  static const double xxl = 32;
+  static const double xxxl = 40;
+}
 
-// Sheet
-const double kSheetHandleWidth = 36.0;
-const double kSheetHandleHeight = 4.0;
-const double kSheetHandleRadius = 2.0;
-const EdgeInsets kSheetPadding = EdgeInsets.only(top: 8, bottom: 12);
-const EdgeInsets kSheetTitlePadding = EdgeInsets.symmetric(vertical: 12);
-const TextStyle kSheetTitleTextStyle = TextStyle(color: kIconColor, fontSize: 16, fontWeight: FontWeight.w500);
-const Color kSheetDividerColor = Colors.white12;
-const TextStyle kSheetListTileTextStyle = TextStyle(color: Colors.white);
+class AppRadii {
+  static const double s = 8;
+  static const double m = 16;
+  static const double l = 24;
+  static const double handle = 2; // small grabber/handle
 
-// Header
-const double kHeaderHPad = 20.0;
-const double kHeaderVPad = 20.0;
-const double kHeaderTitleFontSize = 20.0;
-const FontWeight kHeaderTitleFontWeight = FontWeight.w400;
-const double kHeaderButtonSize = 56.0;
-const double kHeaderIconSize = 28.0;
+  static const BorderRadius brS = BorderRadius.all(Radius.circular(s));
+  static const BorderRadius brM = BorderRadius.all(Radius.circular(m));
+  static const BorderRadius brL = BorderRadius.all(Radius.circular(l));
+}
 
-// Play section
-const double kPlayOuterSize = 240.0;
-const double kPlayInnerSize = 140.0;
-const double kPlayIconSize = 64.0;
-const double kLoaderSize = 28.0;
-const double kPlayBorderWidth = 1.0;
-const Color kPlayBorderColor = kBorderColor;
-const int kWaveCount = 3;
-const double kWaveStrokeWidth = 1.0;
-const Color kWaveColor = Colors.white;
+class AppFonts {
+  // Must match pubspec.yaml
+  static const String primary = 'SFPro';
+}
 
-// Volume section
-const double kVolumeSectionBottomPadding = 40.0;
-const double kVolumeControlHeight = 140.0;
-const double kVolumeLabelFontSize = 13.0;
-const double kVolumeLabelLetterSpacing = 4.0;
-const FontWeight kVolumeLabelFontWeight = FontWeight.w400;
-const double kSliderTrackHeight = 3.0;
-const Color kSliderActiveTrackColor = Colors.white;
-const Color kSliderInactiveTrackColor = Colors.white54;
-const Color kSliderThumbColor = Colors.transparent;
-const Color kSliderOverlayColor = Colors.white24;
+// Typographic scale tokens
+class AppTypography {
+  static const double sizeHeadline = 24;
+  static const double sizeTitle = 20;
+  static const double sizeBody = 16;
+  static const double sizeLabel = 13;
+  static const double sizeCaption = 12;
+  static const double sizeButton = 14;
+  static const double sizeOverline = 11;
+}
 
+// Named text styles used across the app
+class AppTextStyles {
+  static const TextStyle headline = TextStyle(
+    fontSize: AppTypography.sizeHeadline,
+    fontWeight: FontWeight.w700,
+    color: AppColors.white,
+    fontFamily: AppFonts.primary,
+    letterSpacing: 0.5,
+  );
+
+  static const TextStyle title = TextStyle(
+    fontSize: AppTypography.sizeTitle,
+    fontWeight: FontWeight.w400,
+    color: AppColors.white,
+    fontFamily: AppFonts.primary,
+  );
+
+  static const TextStyle subtitleMuted = TextStyle(
+    fontSize: AppTypography.sizeBody,
+    fontWeight: FontWeight.w500,
+    color: AppColors.white70,
+    fontFamily: AppFonts.primary,
+  );
+
+  static const TextStyle body = TextStyle(
+    fontSize: AppTypography.sizeBody,
+    color: AppColors.white,
+    fontFamily: AppFonts.primary,
+    height: 1.25,
+  );
+
+  static const TextStyle bodyMuted = TextStyle(
+    fontSize: AppTypography.sizeBody,
+    color: AppColors.white70,
+    fontFamily: AppFonts.primary,
+    height: 1.25,
+  );
+
+  static const TextStyle captionMuted = TextStyle(
+    fontSize: AppTypography.sizeCaption,
+    color: AppColors.white54,
+    fontFamily: AppFonts.primary,
+  );
+
+  static const TextStyle labelCaps = TextStyle(
+    fontSize: AppTypography.sizeLabel,
+    color: AppColors.white70,
+    letterSpacing: 4,
+    fontWeight: FontWeight.w400,
+    fontFamily: AppFonts.primary,
+  );
+
+  static const TextStyle button = TextStyle(
+    fontSize: AppTypography.sizeButton,
+    fontWeight: FontWeight.w600,
+    color: AppColors.white,
+    letterSpacing: 0.3,
+    fontFamily: AppFonts.primary,
+  );
+
+  static const TextStyle overline = TextStyle(
+    fontSize: AppTypography.sizeOverline,
+    color: AppColors.white70,
+    letterSpacing: 2,
+    fontFamily: AppFonts.primary,
+  );
+}
+
+class AppDimens {
+  static const double iconS = 20;
+  static const double iconM = 28;
+  static const double iconL = 56;
+  static const double iconXL = 64;
+  static const double controlS = 40;
+  static const double controlM = 56;
+  static const double controlL = 140;
+  static const double playArea = 240;
+  static const double trackHeight = 3;
+  static const double borderThin = 1;
+  static const double handleWidth = 36;
+  static const double handleHeight = 4;
+}
+
+class AppButtons {
+  static ButtonStyle filled({
+    Color? background,
+    Color? foreground,
+    EdgeInsetsGeometry? padding,
+    BorderRadiusGeometry? radius,
+  }) {
+    final Color bg = background ?? AppColors.accent;
+    final Color fg = foreground ?? AppColors.white;
+    final BorderRadiusGeometry shapeRadius = radius ?? AppRadii.brM;
+    final EdgeInsetsGeometry contentPadding = padding ?? const EdgeInsets.symmetric(horizontal: AppSpacing.l, vertical: AppSpacing.s);
+    Color resolveBg(Set<WidgetState> states) {
+      if (states.contains(WidgetState.disabled)) return bg.withValues(alpha: 0.38);
+      if (states.contains(WidgetState.pressed)) return bg.withValues(alpha: 0.90);
+      return bg;
+    }
+    Color resolveFg(Set<WidgetState> states) {
+      if (states.contains(WidgetState.disabled)) return AppColors.white70;
+      return fg;
+    }
+    Color resolveOverlay(Set<WidgetState> states) {
+      if (states.contains(WidgetState.pressed)) return AppColors.white24;
+      return AppColors.transparent;
+    }
+    return ButtonStyle(
+      textStyle: WidgetStateProperty.all(AppTextStyles.button),
+      padding: WidgetStateProperty.all(contentPadding),
+      shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: shapeRadius as BorderRadius)),
+      backgroundColor: WidgetStateProperty.resolveWith(resolveBg),
+      foregroundColor: WidgetStateProperty.resolveWith(resolveFg),
+      overlayColor: WidgetStateProperty.resolveWith(resolveOverlay),
+      elevation: const WidgetStatePropertyAll(0),
+    );
+  }
+
+  static ButtonStyle outline({
+    Color? foreground,
+    Color? borderColor,
+    EdgeInsetsGeometry? padding,
+    BorderRadiusGeometry? radius,
+  }) {
+    final Color fg = foreground ?? AppColors.white;
+    final Color border = borderColor ?? AppColors.stroke;
+    final BorderRadiusGeometry shapeRadius = radius ?? AppRadii.brM;
+    final EdgeInsetsGeometry contentPadding = padding ?? const EdgeInsets.symmetric(horizontal: AppSpacing.l, vertical: AppSpacing.s);
+    Color resolveFg(Set<WidgetState> states) {
+      if (states.contains(WidgetState.disabled)) return AppColors.white54;
+      return fg;
+    }
+    Color resolveOverlay(Set<WidgetState> states) {
+      if (states.contains(WidgetState.pressed)) return AppColors.white24;
+      return AppColors.transparent;
+    }
+    BorderSide resolveSide(Set<WidgetState> states) {
+      final color = states.contains(WidgetState.disabled) ? AppColors.white24 : border;
+      return BorderSide(color: color, width: AppDimens.borderThin);
+    }
+    return ButtonStyle(
+      textStyle: WidgetStateProperty.all(AppTextStyles.button),
+      padding: WidgetStateProperty.all(contentPadding),
+      shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: shapeRadius as BorderRadius)),
+      backgroundColor: const WidgetStatePropertyAll(AppColors.transparent),
+      foregroundColor: WidgetStateProperty.resolveWith(resolveFg),
+      overlayColor: WidgetStateProperty.resolveWith(resolveOverlay),
+      side: WidgetStateProperty.resolveWith(resolveSide),
+      elevation: const WidgetStatePropertyAll(0),
+    );
+  }
+
+  static ButtonStyle tonal({
+    Color? background,
+    Color? foreground,
+    EdgeInsetsGeometry? padding,
+    BorderRadiusGeometry? radius,
+  }) {
+    final Color bg = background ?? AppColors.white12;
+    final Color fg = foreground ?? AppColors.white;
+    final BorderRadiusGeometry shapeRadius = radius ?? AppRadii.brM;
+    final EdgeInsetsGeometry contentPadding = padding ?? const EdgeInsets.symmetric(horizontal: AppSpacing.l, vertical: AppSpacing.s);
+    Color resolveBg(Set<WidgetState> states) {
+      if (states.contains(WidgetState.disabled)) return bg.withValues(alpha: 0.5);
+      if (states.contains(WidgetState.pressed)) return bg.withValues(alpha: 0.9);
+      return bg;
+    }
+    return ButtonStyle(
+      textStyle: WidgetStateProperty.all(AppTextStyles.button),
+      padding: WidgetStateProperty.all(contentPadding),
+      shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: shapeRadius as BorderRadius)),
+      backgroundColor: WidgetStateProperty.resolveWith(resolveBg),
+      foregroundColor: WidgetStateProperty.all(fg),
+      overlayColor: const WidgetStatePropertyAll(AppColors.white24),
+      elevation: const WidgetStatePropertyAll(0),
+    );
+  }
+
+  static ButtonStyle ghost({
+    Color? foreground,
+    EdgeInsetsGeometry? padding,
+    BorderRadiusGeometry? radius,
+  }) {
+    final Color fg = foreground ?? AppColors.white;
+    final BorderRadiusGeometry shapeRadius = radius ?? AppRadii.brM;
+    final EdgeInsetsGeometry contentPadding = padding ?? const EdgeInsets.symmetric(horizontal: AppSpacing.l, vertical: AppSpacing.s);
+    return ButtonStyle(
+      textStyle: WidgetStateProperty.all(AppTextStyles.button),
+      padding: WidgetStateProperty.all(contentPadding),
+      shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: shapeRadius as BorderRadius)),
+      backgroundColor: const WidgetStatePropertyAll(AppColors.transparent),
+      foregroundColor: WidgetStateProperty.all(fg),
+      overlayColor: const WidgetStatePropertyAll(AppColors.white24),
+      elevation: const WidgetStatePropertyAll(0),
+    );
+  }
+}
