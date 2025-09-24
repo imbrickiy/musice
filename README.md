@@ -275,38 +275,3 @@ git push -u origin feature/my-change
 MIT — см. файл `LICENSE` в корне репозитория.
 
 © 2025 imbrickiy
-
-
-## Git hooks и CI
-
-В репозитории настроены локальные pre-commit хуки и CI, которые помогают держать код в порядке.
-
-- Pre-commit хук (локально): выполняет генерацию локализаций, кастомный линт (запрещает прямые `Icons.*` в `lib/`), `flutter analyze` и тесты.
-- CI (GitHub Actions): запускается для веток `main` и `master` на push/PR и повторяет те же проверки.
-
-Настройка pre-commit:
-```zsh
-# из корня репозитория
-./scripts/setup-git-hooks.sh
-```
-После этого при каждом коммите автоматически выполнятся проверки:
-- `flutter gen-l10n`
-- `dart run custom_lint` (запрещает прямые `Icons.*` — используйте `AppIcons`)
-- `flutter analyze`
-- `flutter test -r compact`
-
-Полезно знать:
-- Можно временно пропустить тесты: `SKIP_TESTS=1 git commit -m "msg"`
-- Полностью обойти хуки (не рекомендуется): `git commit --no-verify -m "msg"`
-
-CI-триггеры:
-- Файл: `.github/workflows/ci.yml`
-- По умолчанию триггеры настроены на ветки `main` и `master`.
-- Чтобы изменить список веток, отредактируйте секции `on.push.branches` и `on.pull_request.branches` в workflow, например:
-```yaml
-on:
-  push:
-    branches: [ develop ]
-  pull_request:
-    branches: [ develop ]
-```

@@ -1,68 +1,76 @@
 import 'package:flutter/material.dart';
 import 'package:musice/constants/app_constants.dart';
-import 'package:musice/l10n/app_localizations.dart';
-import 'package:musice/icons/app_icons.dart';
 
 class RadioHeader extends StatelessWidget {
+  final String title;
   final VoidCallback onStationsTap;
-  final VoidCallback? onSettingsTap;
-  const RadioHeader({super.key, required this.onStationsTap, this.onSettingsTap});
+  final VoidCallback? onReload;
+  final bool showReload;
+  final VoidCallback? onSettings;
+  final bool showSettings;
+  const RadioHeader({
+    super.key,
+    required this.title,
+    required this.onStationsTap,
+    this.onReload,
+    this.showReload = false,
+    this.onSettings,
+    this.showSettings = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: kHeaderHPad, vertical: kHeaderVPad),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.l, vertical: AppSpacing.l),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Material(
-            type: MaterialType.transparency,
-            child: Tooltip(
-              message: l10n.stationsTooltip,
-              child: Semantics(
-                button: true,
-                label: l10n.stationsSemantics,
+          Text(title, style: AppTextStyles.title),
+          Row(
+            children: [
+              if (showSettings)
+                Material(
+                  type: MaterialType.transparency,
+                  child: InkWell(
+                    key: const Key('settingsButton'),
+                    customBorder: const CircleBorder(),
+                    onTap: onSettings,
+                    child: const SizedBox(
+                      width: AppDimens.controlM,
+                      height: AppDimens.controlM,
+                      child: Center(child: Icon(Icons.settings, size: AppDimens.iconM)),
+                    ),
+                  ),
+                ),
+              if (showReload)
+                Material(
+                  type: MaterialType.transparency,
+                  child: InkWell(
+                    key: const Key('reloadButton'),
+                    customBorder: const CircleBorder(),
+                    onTap: onReload,
+                    child: const SizedBox(
+                      width: AppDimens.controlM,
+                      height: AppDimens.controlM,
+                      child: Center(child: Icon(Icons.refresh, size: AppDimens.iconM)),
+                    ),
+                  ),
+                ),
+              Material(
+                type: MaterialType.transparency,
                 child: InkWell(
                   key: const Key('stationsButton'),
                   customBorder: const CircleBorder(),
                   onTap: onStationsTap,
                   child: const SizedBox(
-                    width: kHeaderButtonSize,
-                    height: kHeaderButtonSize,
+                    width: AppDimens.controlM,
+                    height: AppDimens.controlM,
                     child: Center(
-                      child: Icon(AppIcons.podcasts, size: kHeaderIconSize, color: kIconColor),
+                      child: Icon(Icons.podcasts, size: AppDimens.iconM),
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
-          Row(
-            children: [
-              if (onSettingsTap != null)
-                Material(
-                  type: MaterialType.transparency,
-                  child: Tooltip(
-                    message: l10n.settings,
-                    child: Semantics(
-                      button: true,
-                      label: l10n.settings,
-                      child: InkWell(
-                        key: const Key('settingsButton'),
-                        customBorder: const CircleBorder(),
-                        onTap: onSettingsTap,
-                        child: const SizedBox(
-                          width: kHeaderButtonSize,
-                          height: kHeaderButtonSize,
-                          child: Center(
-                            child: Icon(AppIcons.settings, size: kHeaderIconSize, color: kIconColor),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
             ],
           ),
         ],
