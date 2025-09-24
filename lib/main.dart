@@ -9,6 +9,7 @@ import 'package:musice/widgets/volume_section.dart';
 import 'package:musice/widgets/station_picker_sheet.dart';
 import 'package:musice/models/station.dart';
 import 'dart:async';
+import 'package:musice/constants/app_constants.dart';
 
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -16,7 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
     await windowManager.ensureInitialized();
-    const size = Size(390, 844); // iPhone 14 logical size (portrait)
+    const size = kWindowSize; // iPhone 14 logical size (portrait)
     final options = WindowOptions(
       size: size,
       minimumSize: size,
@@ -41,27 +42,27 @@ class RadioApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final base = ThemeData(brightness: Brightness.dark, useMaterial3: true, fontFamily: 'SFPro');
     final scheme = ColorScheme.fromSeed(
-      seedColor: const Color(0xFF7C4DFF),
+      seedColor: kSeedColor,
       brightness: Brightness.dark,
     );
     final theme = base.copyWith(
       colorScheme: scheme,
-      scaffoldBackgroundColor: const Color(0xFF0B0B0D),
-      iconTheme: const IconThemeData(color: Colors.white70),
+      scaffoldBackgroundColor: kScaffoldBackgroundColor,
+      iconTheme: const IconThemeData(color: kIconColor),
       textTheme: base.textTheme.copyWith(
         titleMedium: base.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600, letterSpacing: 0.2),
         bodyMedium: base.textTheme.bodyMedium?.copyWith(height: 1.2),
       ),
-      dividerColor: Colors.white24,
+      dividerColor: kDividerColor,
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: Colors.transparent,
-        foregroundColor: Colors.white70,
+        foregroundColor: kIconColor,
         elevation: 0,
         focusElevation: 0,
         hoverElevation: 0,
         disabledElevation: 0,
         shape: CircleBorder(
-          side: BorderSide(color: Colors.white24, width: 1),
+          side: BorderSide(color: kBorderColor, width: 1),
         ),
       ),
     );
@@ -88,7 +89,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // Small delay to show the loader, then navigate to the home page
-    Future<void>.delayed(const Duration(milliseconds: 1200), () {
+    Future<void>.delayed(kSplashDuration, () {
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const RadioHomePage()),
@@ -107,7 +108,7 @@ class _SplashScreenState extends State<SplashScreen> {
             children: [
               // App name / logo placeholder
               Text(
-                'Musice',
+                kAppName,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
@@ -121,7 +122,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 height: 28,
                 child: CircularProgressIndicator(
                   strokeWidth: 3,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white70),
+                  valueColor: AlwaysStoppedAnimation<Color>(kIconColor),
                 ),
               ),
             ],
@@ -146,12 +147,7 @@ class _RadioHomePageState extends State<RadioHomePage> with SingleTickerProvider
   String? selectedStationUrl = "https://hls-01-radiorecord.hostingradio.ru/record-deep/playlist.m3u8";
 
   // Available stations for selection
-  final List<Station> _stations = const [
-    Station('Deep', 'https://hls-01-radiorecord.hostingradio.ru/record-deep/playlist.m3u8'),
-    Station('Chill-Out', 'https://hls-01-radiorecord.hostingradio.ru/record-chil/playlist.m3u8'),
-    Station('Ambient', 'https://hls-01-radiorecord.hostingradio.ru/record-ambient/playlist.m3u8'),
-    Station('Power Deep', 'https://listen.powerapp.com.tr/powerdeep/abr/playlist.m3u8'),
-  ];
+  final List<Station> _stations = kStations;
 
   double volume = 0.5;
 
@@ -173,7 +169,7 @@ class _RadioHomePageState extends State<RadioHomePage> with SingleTickerProvider
   void initState() {
     super.initState();
     _player.setVolume(volume);
-    _reactCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 900))
+    _reactCtrl = AnimationController(vsync: this, duration: kReactionDuration)
       ..addListener(() {
         final s = (math.sin(2 * math.pi * _reactCtrl.value) + 1) / 2; // 0..1
         _reactiveLevel = s * 0.8;
@@ -210,7 +206,7 @@ class _RadioHomePageState extends State<RadioHomePage> with SingleTickerProvider
         backgroundColor: Colors.black,
         isScrollControlled: true,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(kDefaultRadius)),
         ),
         builder: (context) => StationPickerSheet(stations: _stations, current: current),
       );
@@ -292,11 +288,11 @@ class _RadioHomePageState extends State<RadioHomePage> with SingleTickerProvider
       isScrollControlled: true,
       backgroundColor: Colors.black,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(kDefaultRadius)),
       ),
       builder: (context) => const _AboutSheet(
-        appName: 'Musice',
-        version: '1.0.0',
+        appName: kAppName,
+        version: kAppVersion,
       ),
     );
   }
@@ -377,7 +373,7 @@ class _AboutSheet extends StatelessWidget {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+        padding: const EdgeInsets.fromLTRB(kDefaultPadding, kDefaultPadding, kDefaultPadding, kDefaultPadding),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -390,7 +386,7 @@ class _AboutSheet extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Center(
-              child: Text('imbrickiy © 2025',
+              child: Text(kCopyright,
                   style: theme.textTheme.bodySmall?.copyWith(color: Colors.white54)),
             ),
             const SizedBox(height: 8),

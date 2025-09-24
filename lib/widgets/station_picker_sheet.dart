@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musice/models/station.dart';
+import 'package:musice/constants/app_constants.dart';
 
 class StationPickerSheet extends StatelessWidget {
   final List<Station> stations;
@@ -11,37 +12,37 @@ class StationPickerSheet extends StatelessWidget {
     final sheetMaxHeight = MediaQuery.of(context).size.height * 0.6;
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.only(top: 8, bottom: 12),
+        padding: kSheetPadding,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 36,
-              height: 4,
+              width: kSheetHandleWidth,
+              height: kSheetHandleHeight,
               decoration: BoxDecoration(
-                color: Colors.white24,
-                borderRadius: BorderRadius.circular(2),
+                color: kDividerColor,
+                borderRadius: BorderRadius.circular(kSheetHandleRadius),
               ),
             ),
             const SizedBox(height: 8),
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 12),
+              padding: kSheetTitlePadding,
               child: Text(
                 'Select a station',
-                style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w500),
+                style: kSheetTitleTextStyle,
               ),
             ),
             ConstrainedBox(
               constraints: BoxConstraints(maxHeight: sheetMaxHeight),
               child: ListView.separated(
                 itemCount: stations.length,
-                separatorBuilder: (_, i) => const Divider(height: 1, color: Colors.white12),
+                separatorBuilder: (_, i) => const Divider(height: 1, color: kSheetDividerColor),
                 itemBuilder: (context, index) {
                   final s = stations[index];
                   final selected = s.name == current;
                   return ListTile(
-                    title: Text(s.name, style: const TextStyle(color: Colors.white)),
-                    trailing: selected ? const Icon(Icons.check, color: Colors.white70) : null,
+                    title: Text(s.name, style: kSheetListTileTextStyle),
+                    trailing: selected ? const Icon(Icons.check, color: kIconColor) : null,
                     onTap: () => Navigator.of(context).pop(s),
                   );
                 },
@@ -73,7 +74,7 @@ class _AnimatedSliderState extends State<AnimatedSlider> with SingleTickerProvid
   void initState() {
     super.initState();
     _current = widget.value;
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 180));
+    _controller = AnimationController(vsync: this, duration: kAnimationDuration);
     _animation = AlwaysStoppedAnimation<double>(_current);
   }
 
@@ -112,4 +113,3 @@ class _AnimatedSliderState extends State<AnimatedSlider> with SingleTickerProvid
     );
   }
 }
-
