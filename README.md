@@ -7,7 +7,7 @@ Musice — это небольшой кроссплатформенный рад
 - Выбор радиостанции через нижний модальный лист (с безопасным запасным диалогом, если лист не открылся)
 - Воспроизведение потоков HLS с помощью `just_audio`
 - Кнопка Play/Pause с отображением статусов загрузки/буферизации
-- Плавный регулятор громкости с «анимированным» применением значения
+- Плавный регулятор громкости
 - Реактивная анимация «волн» во время проигрывания
 - Тёмная тема, шрифт SF Pro
 - Для desktop (macOS/Windows/Linux) — фиксированное окно 390×844 (как iPhone 14) через `window_manager`
@@ -77,17 +77,24 @@ flutter pub get
 ```zsh
 flutter test
 ```
-Тестовые файлы: `test/widget_test.dart`, `test/radio_home_page_test.dart`.
+Тестовые файлы: `test/widget_test.dart`, `test/radio_home_page_test.dart`, `test/about_sheet_test.dart`, `test/settings_sheet_test.dart`.
 
 
 ## Структура проекта (основное)
-- `lib/main.dart` — входная точка: выбор/старт станции, управление плеером и анимацией, фиксированное desktop‑окно
+- `lib/main.dart` — входная точка приложения (сплэш → домашний экран), настройка темы/локализации, фиксированное desktop‑окно
+- `lib/constants/app_constants.dart` — все ключевые константы UI и список станций `kStations`
 - `lib/models/station.dart` — модель радиостанции
+- `lib/providers/radio_provider.dart` — состояние и логика плеера (`just_audio`, громкость, выбор станции)
+- `lib/settings/settings_controller.dart` — настройки (автозапуск, запоминание станции)
+- `lib/locale/locale_controller.dart` — смена локали и сохранение выбора
+- `lib/l10n/` — локализации (ARB и сгенерированный код)
+- `lib/icons/app_icons.dart` — централизованные иконки приложения
 - `lib/widgets/` — UI‑компоненты:
-  - `radio_header.dart` — заголовок с выбором станции
-  - `play_section.dart` — секция с Play/Pause и анимацией
-  - `volume_section.dart` — регулятор громкости с анимированным применением
+  - `radio_header.dart` — заголовок с кнопками станций и настроек
+  - `play_section.dart` — секция с Play/Pause и анимацией волн
+  - `volume_section.dart` — регулятор громкости
   - `station_picker_sheet.dart` — модальный лист выбора станции
+  - `about_sheet.dart`, `settings_sheet.dart` — листы «О приложении» и «Настройки»
   - `wave_pulse.dart` — визуализация «волн»
 - `lib/assets/` — изображения/скриншоты
 - `lib/fonts/` — шрифт SF Pro (подключён как `family: SFPro` в `pubspec.yaml`)
@@ -95,11 +102,11 @@ flutter test
 
 
 ## Как добавить/изменить радиостанции
-Станции определены в списке `_stations` внутри `lib/main.dart`. Пример элемента:
+Станции определены в `lib/constants/app_constants.dart` в списке `kStations`. Пример элемента:
 ```text
 const Station('Deep', 'https://example.com/playlist.m3u8')
 ```
-Добавьте новую станцию по аналогии — она появится в списке выбора.
+Добавьте новую станцию по аналогии — она появится в списке выбора при следующем запуске.
 
 
 ## Поведение на разных платформах
@@ -132,38 +139,19 @@ flutter run -d macos --release
 ```
 
 
-## Дизайн‑токены (константы)
-Все ключевые константы UI собраны в одном месте: `lib/constants/app_constants.dart`.
-Это облегчает поддержку единого стиля и быстрые правки.
+## Константы интерфейса (app_constants.dart)
+Все основные значения собраны в `lib/constants/app_constants.dart` и сгруппированы по назначению:
+- Окно: `kWindowSize`
+- Цвета: `kSeedColor`, `kScaffoldBackgroundColor`, `kIconColor`, `kDividerColor`, `kBorderColor`, др.
+- Длительности: `kSplashDuration`, `kReactionDuration`, `kAnimationDuration`, `kWaveAnimDuration`
+- Инфо о приложении: `kAppName`, `kAppVersion`, `kCopyright`
+- Станции: `kStations` (список `List<Station>`) — редактируйте его для добавления/удаления станций
+- UI‑токены:
+  - Заголовок: `kHeaderHPad`, `kHeaderVPad`, `kHeaderButtonSize`, `kHeaderIconSize`, др.
+  - Секция воспроизведения: размеры окружностей, толщина волн и т.д.
+  - Секция громкости: высота, трек, цвета и т.п.
 
-Доступные группы токенов:
-- AppColors — цвета (фон, белые оттенки, разделители/обводки, акцент, прозрачный)
-- AppSpacing — отступы (xs…xxxl)
-- AppRadii — радиусы (s/m/l) и готовые BorderRadius (brS, brM, brL), а также маленький `handle`
-- AppFonts — шрифтовое семейство (по умолчанию 'SFPro')
-- AppTypography — базовая типографическая шкала (размеры headline/title/body/label/caption)
-- AppTextStyles — именованные текстовые стили (headline, title, body, bodyMuted, captionMuted, labelCaps)
-
-Как это подключено в теме:
-- В `lib/main.dart` маппинг `ThemeData.textTheme` перенастроен на `AppTextStyles`,
-  чтобы виджеты могли использовать `Theme.of(context).textTheme` и единые стили.
-
-Как пользоваться в коде:
-- Цвета: `AppColors.white70`, `AppColors.background`, `AppColors.stroke`
-- Отступы: `const SizedBox(height: AppSpacing.m)`, `EdgeInsets.symmetric(horizontal: AppSpacing.l)`
-- Радиусы: `BorderRadius.circular(AppRadii.m)` или готовые `AppRadii.brM`
-- Текст: либо через тему (`theme.textTheme.headlineSmall`), либо напрямую `AppTextStyles.title`
-
-Как расширять/менять:
-1) Добавить токен
-   - Откройте `lib/constants/app_constants.dart`
-   - В нужный раздел (например, `AppColors` или `AppSpacing`) добавьте константу
-   - При необходимости добавьте новый стиль в `AppTextStyles`
-2) Применить
-   - Замените хардкод в виджетах на новые токены
-   - При добавлении новых текстовых ролей — при желании добавьте их в маппинг темы в `main.dart`
-
-Это обеспечивает единообразие интерфейса и ускоряет рефакторинг.
+В теме приложения (`ThemeData`) эти константы используются для настройки цветовой схемы и базовой типографики (семейство шрифтов `SFPro`, Material 3).
 
 
 ## Лицензия
