@@ -55,4 +55,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get ok => 'ОК';
+
+  @override
+  String get settings => 'Настройки';
+
+  @override
+  String get autoplayOnLaunch => 'Автовоспроизведение при запуске';
+
+  @override
+  String get rememberLastStation => 'Запоминать последнюю станцию';
 }

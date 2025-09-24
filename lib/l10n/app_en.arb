@@ -15,5 +15,8 @@
   "systemDefault": "System default",
   "languageEnglish": "English",
   "languageRussian": "Russian",
-  "ok": "OK"
+  "ok": "OK",
+  "settings": "Settings",
+  "autoplayOnLaunch": "Autoplay on launch",
+  "rememberLastStation": "Remember last station"
 }

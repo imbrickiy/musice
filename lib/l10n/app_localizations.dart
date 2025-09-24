@@ -193,6 +193,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'OK'**
   String get ok;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @autoplayOnLaunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Autoplay on launch'**
+  String get autoplayOnLaunch;
+
+  /// No description provided for @rememberLastStation.
+  ///
+  /// In en, this message translates to:
+  /// **'Remember last station'**
+  String get rememberLastStation;
 }
 
 class _AppLocalizationsDelegate

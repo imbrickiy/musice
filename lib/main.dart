@@ -11,10 +11,11 @@ import 'package:musice/constants/app_constants.dart';
 import 'package:musice/widgets/about_sheet.dart';
 import 'package:musice/l10n/app_localizations.dart';
 import 'package:musice/locale/locale_controller.dart';
-import 'package:musice/widgets/language_picker_sheet.dart';
 import 'package:musice/icons/app_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:musice/providers/radio_provider.dart';
+import 'package:musice/settings/settings_controller.dart';
+import 'package:musice/widgets/settings_sheet.dart';
 
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -41,6 +42,7 @@ Future<void> _activateDesktopWindow() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocaleController.instance.init();
+  await SettingsController.instance.init();
   if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
     await windowManager.ensureInitialized();
     const size = kWindowSize; // iPhone 14 logical size (portrait)
@@ -209,6 +211,21 @@ class RadioHomePage extends StatefulWidget {
 }
 
 class _RadioHomePageState extends State<RadioHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      // Autoplay on launch setting
+      if (SettingsController.instance.autoplayOnLaunch.value) {
+        final p = context.read<RadioProvider>();
+        if (!p.isPlaying) {
+          p.play();
+        }
+      }
+    });
+  }
+
   void _showErrorIfAny(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final p = context.read<RadioProvider>();
@@ -231,12 +248,6 @@ class _RadioHomePageState extends State<RadioHomePage> {
     );
 
     // Optional: provide a secondary way to see details
-    // Long-press on the snackbar content is not feasible, so add a floating button in context menu
-    // Here, we add a second snackbar with a "Details" action chained via closed callback if needed
-    // but to keep UX simple, expose details via an alert if user taps the Retry button while it's still failing.
-    // For explicit Details button in the UI header, we could add an overflow menu in future.
-
-    // Alternatively, show a details dialog immediately as an optional second action using another snackbar.
     messenger.showSnackBar(
       SnackBar(
         content: Text(l10n.playbackErrorTitle),
@@ -346,6 +357,20 @@ class _RadioHomePageState extends State<RadioHomePage> {
     );
   }
 
+  void _showSettings() {
+    if (!mounted) return;
+    showModalBottomSheet<void>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      backgroundColor: Colors.black,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(kDefaultRadius)),
+      ),
+      builder: (context) => const SettingsSheet(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -370,21 +395,7 @@ class _RadioHomePageState extends State<RadioHomePage> {
           children: [
             RadioHeader(
               onStationsTap: _showStationPicker,
-              onLanguageTap: () async {
-                final current = LocaleController.instance.locale.value;
-                final locale = await showModalBottomSheet<Locale?>(
-                  context: context,
-                  useRootNavigator: true,
-                  backgroundColor: Colors.black,
-                  isScrollControlled: true,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(kDefaultRadius)),
-                  ),
-                  builder: (context) => LanguagePickerSheet(current: current),
-                );
-                if (!mounted) return;
-                await LocaleController.instance.setLocale(locale);
-              },
+              onSettingsTap: _showSettings,
             ),
             Text(
               p.selected?.name ?? l10n.selectStation,

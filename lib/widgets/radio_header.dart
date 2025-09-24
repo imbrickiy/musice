@@ -5,8 +5,8 @@ import 'package:musice/icons/app_icons.dart';
 
 class RadioHeader extends StatelessWidget {
   final VoidCallback onStationsTap;
-  final VoidCallback? onLanguageTap;
-  const RadioHeader({super.key, required this.onStationsTap, this.onLanguageTap});
+  final VoidCallback? onSettingsTap;
+  const RadioHeader({super.key, required this.onStationsTap, this.onSettingsTap});
 
   @override
   Widget build(BuildContext context) {
@@ -38,29 +38,33 @@ class RadioHeader extends StatelessWidget {
               ),
             ),
           ),
-          if (onLanguageTap != null)
-            Material(
-              type: MaterialType.transparency,
-              child: Tooltip(
-                message: l10n.language,
-                child: Semantics(
-                  button: true,
-                  label: l10n.language,
-                  child: InkWell(
-                    key: const Key('languageButton'),
-                    customBorder: const CircleBorder(),
-                    onTap: onLanguageTap,
-                    child: const SizedBox(
-                      width: kHeaderButtonSize,
-                      height: kHeaderButtonSize,
-                      child: Center(
-                        child: Icon(AppIcons.language, size: kHeaderIconSize, color: kIconColor),
+          Row(
+            children: [
+              if (onSettingsTap != null)
+                Material(
+                  type: MaterialType.transparency,
+                  child: Tooltip(
+                    message: l10n.settings,
+                    child: Semantics(
+                      button: true,
+                      label: l10n.settings,
+                      child: InkWell(
+                        key: const Key('settingsButton'),
+                        customBorder: const CircleBorder(),
+                        onTap: onSettingsTap,
+                        child: const SizedBox(
+                          width: kHeaderButtonSize,
+                          height: kHeaderButtonSize,
+                          child: Center(
+                            child: Icon(AppIcons.settings, size: kHeaderIconSize, color: kIconColor),
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
+            ],
+          ),
         ],
       ),
     );

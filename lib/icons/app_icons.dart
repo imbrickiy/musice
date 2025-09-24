@@ -13,5 +13,5 @@ class AppIcons {
   static const IconData language = Icons.language;
   static const IconData info = Icons.info_outline;
   static const IconData check = Icons.check;
+  static const IconData settings = Icons.settings_outlined;
 }
-

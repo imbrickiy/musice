@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musice/models/station.dart';
 import 'package:musice/constants/app_constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:musice/settings/settings_controller.dart';
 
 class PlaybackError {
   final String details;
@@ -12,6 +14,8 @@ class PlaybackError {
 }
 
 class RadioProvider with ChangeNotifier {
+  static const _prefsKeyLastStation = 'last_station_name';
+
   final AudioPlayer _player = AudioPlayer();
   final List<Station> _stations = kStations;
   Station? _selected;
@@ -43,6 +47,24 @@ class RadioProvider with ChangeNotifier {
       }
       notifyListeners();
     });
+
+    _loadRememberedStationIfAny();
+  }
+
+  Future<void> _loadRememberedStationIfAny() async {
+    try {
+      if (!SettingsController.instance.rememberLastStation.value) return;
+      final prefs = await SharedPreferences.getInstance();
+      final name = prefs.getString(_prefsKeyLastStation);
+      if (name == null) return;
+      final found = _stations.where((s) => s.name == name);
+      if (found.isNotEmpty) {
+        _selected = found.first;
+        notifyListeners();
+      }
+    } catch (_) {
+      // ignore
+    }
   }
 
   List<Station> get stations => _stations;
@@ -66,8 +88,23 @@ class RadioProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> _persistSelectedIfNeeded() async {
+    if (!SettingsController.instance.rememberLastStation.value) return;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (_selected == null) {
+        await prefs.remove(_prefsKeyLastStation);
+      } else {
+        await prefs.setString(_prefsKeyLastStation, _selected!.name);
+      }
+    } catch (_) {
+      // ignore
+    }
+  }
+
   void selectStation(Station station) {
     _selected = station;
+    _persistSelectedIfNeeded();
     _startStationWithBackoff(station.url);
     notifyListeners();
   }

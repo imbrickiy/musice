@@ -55,4 +55,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ok => 'OK';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get autoplayOnLaunch => 'Autoplay on launch';
+
+  @override
+  String get rememberLastStation => 'Remember last station';
 }
