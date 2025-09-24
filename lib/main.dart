@@ -15,6 +15,8 @@ import 'package:musice/config/stations.dart';
 import 'package:musice/services/stations_repository.dart';
 import 'package:musice/screens/stations_settings_screen.dart';
 
+// Global navigator key for use in non-widget code (e.g. services)
+
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
