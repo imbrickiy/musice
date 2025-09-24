@@ -14,7 +14,7 @@ class WavePulse extends StatefulWidget {
     super.key,
     required this.active,
     this.waves = 3,
-    this.color = AppColors.white,
+    this.color = Colors.white,
     this.strokeWidth = 1.0,
     this.intensity = 0.5,
     this.reactiveLevel,

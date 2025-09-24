@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:musice/widgets/animated_slider.dart';
+// Removed animated slider to avoid compilation issues
 import 'package:musice/constants/app_constants.dart';
 import 'package:musice/l10n/app_localizations.dart';
 
@@ -30,10 +30,14 @@ class VolumeSection extends StatelessWidget {
                   thumbColor: kSliderThumbColor,
                   overlayColor: kSliderOverlayColor,
                 ),
-                child: AnimatedSlider(
+                child: Slider(
                   value: value,
-                  onChanged: onChanged,
-                  onAnimated: onAnimated,
+                  onChanged: (v) {
+                    onChanged(v);
+                    if (onAnimated != null) onAnimated!(v);
+                  },
+                  min: 0,
+                  max: 1,
                 ),
               ),
             ),
