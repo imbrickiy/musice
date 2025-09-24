@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musice/widgets/animated_slider.dart';
 import 'package:musice/constants/app_constants.dart';
+import 'package:musice/l10n/app_localizations.dart';
 
 class VolumeSection extends StatelessWidget {
   final double value;
@@ -10,6 +11,7 @@ class VolumeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.only(bottom: kVolumeSectionBottomPadding),
       child: Column(
@@ -37,9 +39,9 @@ class VolumeSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          const Text(
-            "VOLUME",
-            style: TextStyle(
+          Text(
+            l10n.volumeLabel,
+            style: const TextStyle(
               color: kIconColor,
               fontSize: kVolumeLabelFontSize,
               letterSpacing: kVolumeLabelLetterSpacing,

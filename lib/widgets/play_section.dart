@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:musice/widgets/wave_pulse.dart';
 import 'package:musice/constants/app_constants.dart';
+import 'package:musice/icons/app_icons.dart';
+import 'package:musice/l10n/app_localizations.dart';
 
 class PlaySection extends StatelessWidget {
   final bool isPlaying;
@@ -28,10 +30,12 @@ class PlaySection extends StatelessWidget {
             child: CircularProgressIndicator(strokeWidth: 2, color: kIconColor),
           )
         : Icon(
-            isPlaying ? Icons.pause : Icons.play_arrow,
+            isPlaying ? AppIcons.pause : AppIcons.play,
             size: kPlayIconSize,
             color: kIconColor,
           );
+
+    final l10n = AppLocalizations.of(context)!;
 
     return Center(
       child: SizedBox(
@@ -56,7 +60,7 @@ class PlaySection extends StatelessWidget {
               child: Semantics(
                 button: true,
                 enabled: !isLoading,
-                label: isPlaying ? 'Pause' : 'Play',
+                label: isPlaying ? l10n.pause : l10n.play,
                 child: GestureDetector(
                   onTap: () => isPlaying ? onPause() : onPlay(),
                   child: Container(
