@@ -1,5 +1,7 @@
+// Play button with wave pulse animation
 import 'package:flutter/material.dart';
 import 'package:musice/widgets/wave_pulse.dart';
+import 'package:musice/constants/app_constants.dart';
 
 class PlaySection extends StatelessWidget {
   final bool isPlaying;
@@ -22,20 +24,26 @@ class PlaySection extends StatelessWidget {
   Widget build(BuildContext context) {
     final iconWidget = isLoading
         ? const SizedBox(
-            width: 28,
-            height: 28,
-            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white70),
+            width: AppDimens.iconM,
+            height: AppDimens.iconM,
+            child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.white70),
           )
-        : Icon(
-            isPlaying ? Icons.pause : Icons.play_arrow,
-            size: 64,
-            color: Colors.white70,
+        : const Icon(
+            Icons.pause, // will be overridden below based on isPlaying
+            size: AppDimens.iconXL,
+            color: AppColors.white70,
           );
+
+    final Widget playIcon = Icon(
+      isPlaying ? Icons.pause : Icons.play_arrow,
+      size: AppDimens.iconXL,
+      color: AppColors.white70,
+    );
 
     return Center(
       child: SizedBox(
-        height: 240,
-        width: 240,
+        height: AppDimens.playArea,
+        width: AppDimens.playArea,
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -43,8 +51,8 @@ class PlaySection extends StatelessWidget {
               child: WavePulse(
                 active: isPlaying,
                 waves: 3,
-                color: Colors.white,
-                strokeWidth: 1.0,
+                color: AppColors.white,
+                strokeWidth: AppDimens.borderThin,
                 intensity: volume,
                 reactiveLevel: reactiveLevel,
                 glow: true,
@@ -55,14 +63,14 @@ class PlaySection extends StatelessWidget {
               child: GestureDetector(
                 onTap: () => isPlaying ? onPause() : onPlay(),
                 child: Container(
-                  height: 140,
-                  width: 140,
+                  height: AppDimens.controlL,
+                  width: AppDimens.controlL,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white24, width: 1),
+                    border: Border.all(color: AppColors.white24, width: AppDimens.borderThin),
                   ),
                   alignment: Alignment.center,
-                  child: iconWidget,
+                  child: isLoading ? iconWidget : playIcon,
                 ),
               ),
             ),

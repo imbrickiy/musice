@@ -113,9 +113,57 @@ const Station('Deep', 'https://example.com/playlist.m3u8')
 - Если при выборе станции нижний лист не открылся (редко), сработает запасной диалог.
 
 
-## Известные ограничения
-- Список станций хранится в коде (`main.dart`). Для продакшена можно вынести его в конфигурацию/бэкенд или добавить локальное «избранное».
-- Нет авто‑восстановления потока при обрыве — потенциальное улучшение.
+## Частые проблемы (Release) и их решение
+- macOS: приложение в Release не воспроизводит поток.
+  - Причина: в режиме sandbox по умолчанию запрещены исходящие сетевые соединения.
+  - Решение: в `macos/Runner/Release.entitlements` добавлен ключ `<key>com.apple.security.network.client</key><true/>` (разрешение на исходящие соединения). После изменения пересоберите приложение.
+  - Сборка и запуск релизной версии для проверки:
+    ```zsh
+    flutter build macos
+    open build/macos/Build/Products/Release/musice.app
+    ```
+- iOS: не стартует поток в релизе.
+  - Убедитесь, что в `ios/Runner/Info.plist` есть `NSAppTransportSecurity -> NSAllowsArbitraryLoads = true` или включён HTTPS у потоков (указанные HLS‑URL уже `https`).
+  - Для фонового воспроизведения включите в Xcode Background Modes -> Audio (необязательно для работы на экране).
+
+Если проблема сохраняется, запустите релизную сборку из консоли и приложите логи:
+```zsh
+flutter run -d macos --release
+```
+
+
+## Дизайн‑токены (константы)
+Все ключевые константы UI собраны в одном месте: `lib/constants/app_constants.dart`.
+Это облегчает поддержку единого стиля и быстрые правки.
+
+Доступные группы токенов:
+- AppColors — цвета (фон, белые оттенки, разделители/обводки, акцент, прозрачный)
+- AppSpacing — отступы (xs…xxxl)
+- AppRadii — радиусы (s/m/l) и готовые BorderRadius (brS, brM, brL), а также маленький `handle`
+- AppFonts — шрифтовое семейство (по умолчанию 'SFPro')
+- AppTypography — базовая типографическая шкала (размеры headline/title/body/label/caption)
+- AppTextStyles — именованные текстовые стили (headline, title, body, bodyMuted, captionMuted, labelCaps)
+
+Как это подключено в теме:
+- В `lib/main.dart` маппинг `ThemeData.textTheme` перенастроен на `AppTextStyles`,
+  чтобы виджеты могли использовать `Theme.of(context).textTheme` и единые стили.
+
+Как пользоваться в коде:
+- Цвета: `AppColors.white70`, `AppColors.background`, `AppColors.stroke`
+- Отступы: `const SizedBox(height: AppSpacing.m)`, `EdgeInsets.symmetric(horizontal: AppSpacing.l)`
+- Радиусы: `BorderRadius.circular(AppRadii.m)` или готовые `AppRadii.brM`
+- Текст: либо через тему (`theme.textTheme.headlineSmall`), либо напрямую `AppTextStyles.title`
+
+Как расширять/менять:
+1) Добавить токен
+   - Откройте `lib/constants/app_constants.dart`
+   - В нужный раздел (например, `AppColors` или `AppSpacing`) добавьте константу
+   - При необходимости добавьте новый стиль в `AppTextStyles`
+2) Применить
+   - Замените хардкод в виджетах на новые токены
+   - При добавлении новых текстовых ролей — при желании добавьте их в маппинг темы в `main.dart`
+
+Это обеспечивает единообразие интерфейса и ускоряет рефакторинг.
 
 
 ## Лицензия

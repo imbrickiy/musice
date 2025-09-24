@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musice/models/station.dart';
+import 'package:musice/constants/app_constants.dart';
 
 class StationPickerSheet extends StatelessWidget {
   final List<Station> stations;
@@ -11,37 +12,38 @@ class StationPickerSheet extends StatelessWidget {
     final sheetMaxHeight = MediaQuery.of(context).size.height * 0.6;
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.only(top: 8, bottom: 12),
+        padding: EdgeInsets.only(top: AppSpacing.s, bottom: AppSpacing.sm),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 36,
-              height: 4,
+              width: AppDimens.handleWidth,
+              height: AppDimens.handleHeight,
               decoration: BoxDecoration(
-                color: Colors.white24,
-                borderRadius: BorderRadius.circular(2),
+                color: AppColors.white24,
+                borderRadius: BorderRadius.circular(AppRadii.handle),
               ),
             ),
-            const SizedBox(height: 8),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 12),
-              child: Text(
-                'Select a station',
-                style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w500),
-              ),
+            SizedBox(height: AppSpacing.s),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
+              child: Text('Select a station', style: AppTextStyles.subtitleMuted),
             ),
             ConstrainedBox(
               constraints: BoxConstraints(maxHeight: sheetMaxHeight),
               child: ListView.separated(
                 itemCount: stations.length,
-                separatorBuilder: (_, i) => const Divider(height: 1, color: Colors.white12),
+                separatorBuilder: (_, i) => const Divider(
+                  height: AppDimens.borderThin,
+                  thickness: AppDimens.borderThin,
+                  color: AppColors.white12,
+                ),
                 itemBuilder: (context, index) {
                   final s = stations[index];
                   final selected = s.name == current;
                   return ListTile(
-                    title: Text(s.name, style: const TextStyle(color: Colors.white)),
-                    trailing: selected ? const Icon(Icons.check, color: Colors.white70) : null,
+                    title: Text(s.name, style: AppTextStyles.body),
+                    trailing: selected ? const Icon(Icons.check, color: AppColors.white70) : null,
                     onTap: () => Navigator.of(context).pop(s),
                   );
                 },
@@ -112,4 +114,3 @@ class _AnimatedSliderState extends State<AnimatedSlider> with SingleTickerProvid
     );
   }
 }
-
