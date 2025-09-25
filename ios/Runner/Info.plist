@@ -50,5 +50,10 @@
 		<string>en</string>
 		<string>ru</string>
 	</array>
+	<!-- Enable audio playback in the background -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 </dict>
 </plist>

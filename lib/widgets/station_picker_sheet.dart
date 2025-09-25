@@ -7,7 +7,11 @@ import 'package:musice/icons/app_icons.dart';
 class StationPickerSheet extends StatelessWidget {
   final List<Station> stations;
   final String? current;
-  const StationPickerSheet({super.key, required this.stations, required this.current});
+  const StationPickerSheet({
+    super.key,
+    required this.stations,
+    required this.current,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +22,7 @@ class StationPickerSheet extends StatelessWidget {
         padding: const EdgeInsets.all(kDefaultPadding),
         child: Container(
           padding: const EdgeInsets.all(kDefaultPadding),
-          decoration: BoxDecoration(
-            color: kSecondaryColor,
-            borderRadius: const BorderRadius.all(Radius.circular(kDefaultRadius)),
-            border: Border.all(color: kBorderColor, width: 1),
-          ),
+          decoration: kSheetContainerDecoration,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -37,22 +37,22 @@ class StationPickerSheet extends StatelessWidget {
               const SizedBox(height: 8),
               Padding(
                 padding: kSheetTitlePadding,
-                child: Text(
-                  l10n.selectStation,
-                  style: kSheetTitleTextStyle,
-                ),
+                child: Text(l10n.selectStation, style: kSheetTitleTextStyle),
               ),
               ConstrainedBox(
                 constraints: BoxConstraints(maxHeight: sheetMaxHeight),
                 child: ListView.separated(
                   itemCount: stations.length,
-                  separatorBuilder: (_, i) => const Divider(height: 1, color: kSheetDividerColor),
+                  separatorBuilder: (_, i) =>
+                      const Divider(height: 1, color: kSheetDividerColor),
                   itemBuilder: (context, index) {
                     final s = stations[index];
                     final selected = s.name == current;
                     return ListTile(
                       title: Text(s.name, style: kSheetListTileTextStyle),
-                      trailing: selected ? const Icon(AppIcons.check, color: kIconColor) : null,
+                      trailing: selected
+                          ? const Icon(AppIcons.check, color: kIconColor)
+                          : null,
                       onTap: () => Navigator.of(context).pop(s),
                     );
                   },

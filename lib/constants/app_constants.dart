@@ -28,10 +28,22 @@ const String kCopyright = 'imbrickiy © 2025';
 
 // Stations
 const List<Station> kStations = [
-  Station('Deep', 'https://hls-01-radiorecord.hostingradio.ru/record-deep/playlist.m3u8'),
-  Station('Chill-Out', 'https://hls-01-radiorecord.hostingradio.ru/record-chil/playlist.m3u8'),
-  Station('Ambient', 'https://hls-01-radiorecord.hostingradio.ru/record-ambient/playlist.m3u8'),
-  Station('Power Deep', 'https://listen.powerapp.com.tr/powerdeep/abr/playlist.m3u8'),
+  Station(
+    'Deep',
+    'https://hls-01-radiorecord.hostingradio.ru/record-deep/playlist.m3u8',
+  ),
+  Station(
+    'Chill-Out',
+    'https://hls-01-radiorecord.hostingradio.ru/record-chil/playlist.m3u8',
+  ),
+  Station(
+    'Ambient',
+    'https://hls-01-radiorecord.hostingradio.ru/record-ambient/playlist.m3u8',
+  ),
+  Station(
+    'Power Deep',
+    'https://listen.powerapp.com.tr/powerdeep/abr/playlist.m3u8',
+  ),
   Station('Business FM SPb', 'https://bfmreg.hostingradio.ru/spb.bfm128.mp3'),
   Station('Business FM', 'https://bfm.hostingradio.ru/bfm256.mp3'),
 ];
@@ -46,9 +58,20 @@ const double kSheetHandleHeight = 4.0;
 const double kSheetHandleRadius = 2.0;
 const EdgeInsets kSheetPadding = EdgeInsets.only(top: 8, bottom: 12);
 const EdgeInsets kSheetTitlePadding = EdgeInsets.symmetric(vertical: 12);
-const TextStyle kSheetTitleTextStyle = TextStyle(color: kIconColor, fontSize: 16, fontWeight: FontWeight.w500);
+const TextStyle kSheetTitleTextStyle = TextStyle(
+  color: kIconColor,
+  fontSize: 16,
+  fontWeight: FontWeight.w500,
+);
 const Color kSheetDividerColor = Colors.white12;
 const TextStyle kSheetListTileTextStyle = TextStyle(color: Colors.white);
+
+// Shared decorations
+final BoxDecoration kSheetContainerDecoration = BoxDecoration(
+  color: kSecondaryColor,
+  borderRadius: BorderRadius.all(Radius.circular(kDefaultRadius)),
+  border: Border.all(color: kBorderColor, width: 1),
+);
 
 // Header
 const double kHeaderHPad = 20.0;
@@ -80,4 +103,3 @@ const Color kSliderActiveTrackColor = Colors.white;
 const Color kSliderInactiveTrackColor = Colors.white54;
 const Color kSliderThumbColor = Colors.transparent;
 const Color kSliderOverlayColor = Colors.white24;
-

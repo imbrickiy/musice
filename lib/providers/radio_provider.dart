@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:musice/models/station.dart';
 import 'package:musice/constants/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -120,7 +121,10 @@ class RadioProvider with ChangeNotifier {
     await _player.pause();
   }
 
-  Future<void> _startStationWithBackoff(String url, {int maxAttempts = 3}) async {
+  Future<void> _startStationWithBackoff(
+    String url, {
+    int maxAttempts = 3,
+  }) async {
     _cancelBackoff();
     _retryAttempts = 0;
     await _attemptStart(url, maxAttempts);
@@ -129,7 +133,18 @@ class RadioProvider with ChangeNotifier {
   Future<void> _attemptStart(String url, int maxAttempts) async {
     try {
       await _player.stop();
-      await _player.setAudioSource(AudioSource.uri(Uri.parse(url)));
+      final station = _selected;
+      final source = AudioSource.uri(
+        Uri.parse(url),
+        tag: MediaItem(
+          id: url,
+          title: station?.name ?? 'Radio',
+          artist: 'Live Radio',
+          artUri: Uri.parse('asset:///lib/assets/screenshot_1.png'),
+          extras: const {'isLiveStream': true},
+        ),
+      );
+      await _player.setAudioSource(source);
       await _player.play();
       _cancelBackoff();
     } catch (e) {

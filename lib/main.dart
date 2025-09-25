@@ -16,6 +16,8 @@ import 'package:provider/provider.dart';
 import 'package:musice/providers/radio_provider.dart';
 import 'package:musice/settings/settings_controller.dart';
 import 'package:musice/widgets/settings_sheet.dart';
+import 'package:just_audio_background/just_audio_background.dart';
+import 'package:audio_session/audio_session.dart';
 
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -41,6 +43,21 @@ Future<void> _activateDesktopWindow() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Configure audio background/notification support and session attributes
+  if (Platform.isAndroid || Platform.isIOS) {
+    await JustAudioBackground.init(
+      androidNotificationChannelId: 'com.example.musice.channel.audio',
+      androidNotificationChannelName: 'Music Playback',
+      androidNotificationOngoing: true,
+      androidShowNotificationBadge: true,
+      preloadArtwork: true,
+    );
+  }
+  // Best effort: set up audio session for proper ducking/mixing
+  try {
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.music());
+  } catch (_) {}
   await LocaleController.instance.init();
   await SettingsController.instance.init();
   if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
@@ -52,13 +69,18 @@ void main() async {
       maximumSize: size,
       center: true,
       backgroundColor: Colors.black,
-      titleBarStyle: Platform.isMacOS ? TitleBarStyle.hidden : TitleBarStyle.normal,
+      titleBarStyle: Platform.isMacOS
+          ? TitleBarStyle.hidden
+          : TitleBarStyle.normal,
     );
     await windowManager.waitUntilReadyToShow(options, () async {
       await windowManager.setResizable(false);
       await _activateDesktopWindow();
       // Schedule another activation attempt shortly after to catch edge cases
-      Future<void>.delayed(const Duration(milliseconds: 250), _activateDesktopWindow);
+      Future<void>.delayed(
+        const Duration(milliseconds: 250),
+        _activateDesktopWindow,
+      );
     });
   }
   runApp(const RadioApp());
@@ -77,7 +99,11 @@ class RadioApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final base = ThemeData(brightness: Brightness.dark, useMaterial3: true, fontFamily: 'SFPro');
+    final base = ThemeData(
+      brightness: Brightness.dark,
+      useMaterial3: true,
+      fontFamily: 'SFPro',
+    );
     final scheme = ColorScheme.fromSeed(
       seedColor: kSeedColor,
       brightness: Brightness.dark,
@@ -87,7 +113,10 @@ class RadioApp extends StatelessWidget {
       scaffoldBackgroundColor: kScaffoldBackgroundColor,
       iconTheme: const IconThemeData(color: kIconColor),
       textTheme: base.textTheme.copyWith(
-        titleMedium: base.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600, letterSpacing: 0.2),
+        titleMedium: base.textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.2,
+        ),
         bodyMedium: base.textTheme.bodyMedium?.copyWith(height: 1.2),
       ),
       dividerColor: kDividerColor,
@@ -98,9 +127,7 @@ class RadioApp extends StatelessWidget {
         focusElevation: 0,
         hoverElevation: 0,
         disabledElevation: 0,
-        shape: CircleBorder(
-          side: BorderSide(color: kBorderColor, width: 1),
-        ),
+        shape: CircleBorder(side: BorderSide(color: kBorderColor, width: 1)),
       ),
     );
 
@@ -135,9 +162,9 @@ class _SplashScreenState extends State<SplashScreen> {
     // Small delay to show the loader, then navigate to the home page
     Future<void>.delayed(kSplashDuration, () {
       if (!mounted) return;
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const RadioScope()),
-      );
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const RadioScope()));
     });
   }
 
@@ -183,18 +210,21 @@ class RadioScope extends StatefulWidget {
   State<RadioScope> createState() => _RadioScopeState();
 }
 
-class _RadioScopeState extends State<RadioScope> with SingleTickerProviderStateMixin {
+class _RadioScopeState extends State<RadioScope>
+    with SingleTickerProviderStateMixin {
   late final RadioProvider _radio;
   @override
   void initState() {
     super.initState();
     _radio = RadioProvider(this);
   }
+
   @override
   void dispose() {
     _radio.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RadioProvider>.value(
@@ -261,12 +291,17 @@ class _RadioHomePageState extends State<RadioHomePage> {
               builder: (ctx) => AlertDialog(
                 backgroundColor: Colors.black,
                 title: Text(l10n.playbackErrorTitle),
-                content: SingleChildScrollView(child: Text(text, style: const TextStyle(color: Colors.white70))),
+                content: SingleChildScrollView(
+                  child: Text(
+                    text,
+                    style: const TextStyle(color: Colors.white70),
+                  ),
+                ),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.of(ctx).pop(),
                     child: Text(l10n.ok),
-                  )
+                  ),
                 ],
               ),
             );
@@ -294,9 +329,12 @@ class _RadioHomePageState extends State<RadioHomePage> {
         backgroundColor: Colors.black,
         isScrollControlled: true,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(kDefaultRadius)),
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(kDefaultRadius),
+          ),
         ),
-        builder: (context) => StationPickerSheet(stations: p.stations, current: current),
+        builder: (context) =>
+            StationPickerSheet(stations: p.stations, current: current),
       );
     } catch (e) {
       sheetThrew = true;
@@ -321,7 +359,8 @@ class _RadioHomePageState extends State<RadioHomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(s.name, style: const TextStyle(color: Colors.white)),
-                    if (selected) const Icon(AppIcons.check, color: Colors.white70),
+                    if (selected)
+                      const Icon(AppIcons.check, color: Colors.white70),
                   ],
                 ),
               );
@@ -348,12 +387,12 @@ class _RadioHomePageState extends State<RadioHomePage> {
       isScrollControlled: true,
       backgroundColor: Colors.black,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(kDefaultRadius)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(kDefaultRadius),
+        ),
       ),
-      builder: (context) => const AboutSheet(
-        appName: kAppName,
-        version: kAppVersion,
-      ),
+      builder: (context) =>
+          const AboutSheet(appName: kAppName, version: kAppVersion),
     );
   }
 
@@ -365,7 +404,9 @@ class _RadioHomePageState extends State<RadioHomePage> {
       isScrollControlled: true,
       backgroundColor: Colors.black,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(kDefaultRadius)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(kDefaultRadius),
+        ),
       ),
       builder: (context) => const SettingsSheet(),
     );

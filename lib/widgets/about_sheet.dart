@@ -13,14 +13,15 @@ class AboutSheet extends StatelessWidget {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(kDefaultPadding, kDefaultPadding, kDefaultPadding, kDefaultPadding),
+        padding: const EdgeInsets.fromLTRB(
+          kDefaultPadding,
+          kDefaultPadding,
+          kDefaultPadding,
+          kDefaultPadding,
+        ),
         child: Container(
           padding: const EdgeInsets.all(kDefaultPadding),
-          decoration: BoxDecoration(
-            color: kSecondaryColor,
-            borderRadius: const BorderRadius.all(Radius.circular(kDefaultRadius)),
-            border: Border.all(color: kBorderColor, width: 1),
-          ),
+          decoration: kSheetContainerDecoration,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,20 +30,27 @@ class AboutSheet extends StatelessWidget {
               Text(
                 'Слушайте любимые станции и управляйте громкостью в реальном времени.',
                 textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white70, height: 1.25),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: Colors.white70,
+                  height: 1.25,
+                ),
               ),
               const SizedBox(height: 8),
               Center(
                 child: Text(
                   kCopyright,
-                  style: theme.textTheme.bodySmall?.copyWith(color: Colors.white54),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: Colors.white54,
+                  ),
                 ),
               ),
               const SizedBox(height: 8),
               Center(
                 child: Text(
                   '$appName v$version',
-                  style: theme.textTheme.bodySmall?.copyWith(color: Colors.white54),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: Colors.white54,
+                  ),
                 ),
               ),
             ],
@@ -52,4 +60,3 @@ class AboutSheet extends StatelessWidget {
     );
   }
 }
-
