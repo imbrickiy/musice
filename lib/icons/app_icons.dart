@@ -14,4 +14,7 @@ class AppIcons {
   static const IconData info = Icons.info_outline;
   static const IconData check = Icons.check;
   static const IconData settings = Icons.settings_outlined;
+  static const IconData add = Icons.add;
+  static const IconData edit = Icons.edit;
+  static const IconData delete = Icons.delete;
 }

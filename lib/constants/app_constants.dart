@@ -26,27 +26,8 @@ const String kAppName = 'Musice';
 const String kAppVersion = '1.0.0';
 const String kCopyright = 'imbrickiy © 2025';
 
-// Stations
-const List<Station> kStations = [
-  Station(
-    'Deep',
-    'https://hls-01-radiorecord.hostingradio.ru/record-deep/playlist.m3u8',
-  ),
-  Station(
-    'Chill-Out',
-    'https://hls-01-radiorecord.hostingradio.ru/record-chil/playlist.m3u8',
-  ),
-  Station(
-    'Ambient',
-    'https://hls-01-radiorecord.hostingradio.ru/record-ambient/playlist.m3u8',
-  ),
-  Station(
-    'Power Deep',
-    'https://listen.powerapp.com.tr/powerdeep/abr/playlist.m3u8',
-  ),
-  Station('Business FM SPb', 'https://bfmreg.hostingradio.ru/spb.bfm128.mp3'),
-  Station('Business FM', 'https://bfm.hostingradio.ru/bfm256.mp3'),
-];
+// Stations - теперь пустой список, станции загружаются из JSON
+const List<Station> kStations = [];
 
 // UI
 const double kDefaultPadding = 16.0;

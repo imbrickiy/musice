@@ -331,63 +331,24 @@ class _RadioHomePageState extends State<RadioHomePage> {
   }
 
   Future<void> _showStationPicker() async {
-    final l10n = AppLocalizations.of(context)!;
-    final p = context.read<RadioProvider>();
-    final current = p.selected?.name;
-
     if (!mounted) return;
 
-    Station? chosen;
-    bool sheetThrew = false;
-    try {
-      chosen = await showModalBottomSheet<Station>(
-        context: context,
-        useRootNavigator: true,
-        backgroundColor: Colors.black,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(kDefaultRadius),
-          ),
+    final provider = context.read<RadioProvider>();
+
+    final chosen = await showModalBottomSheet<Station>(
+      context: context,
+      backgroundColor: Colors.black,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(kDefaultRadius),
         ),
-        builder: (context) =>
-            StationPickerSheet(stations: p.stations, current: current),
-      );
-    } catch (e) {
-      sheetThrew = true;
-      debugPrint('Bottom sheet failed: $e');
-    }
-
-    if (!mounted) return;
-
-    if (sheetThrew && chosen == null) {
-      try {
-        chosen = await showDialog<Station>(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) => SimpleDialog(
-            backgroundColor: Colors.black,
-            title: Text(l10n.selectStation),
-            children: p.stations.map((s) {
-              final selected = s.name == current;
-              return SimpleDialogOption(
-                onPressed: () => Navigator.of(context).pop(s),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(s.name, style: const TextStyle(color: Colors.white)),
-                    if (selected)
-                      const Icon(AppIcons.check, color: Colors.white70),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        );
-      } catch (e) {
-        debugPrint('Dialog fallback failed: $e');
-      }
-    }
+      ),
+      builder: (context) => ChangeNotifierProvider<RadioProvider>.value(
+        value: provider,
+        child: const StationPickerSheet(),
+      ),
+    );
 
     if (!mounted) return;
 

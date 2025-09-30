@@ -64,4 +64,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rememberLastStation => 'Remember last station';
+
+  @override
+  String get addStation => 'Add station';
+
+  @override
+  String get requiredField => 'This field is required';
+
+  @override
+  String get invalidUrl => 'Invalid URL';
+
+  @override
+  String get stationName => 'Station name';
+
+  @override
+  String get stationUrl => 'Station URL';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get editStation => 'Edit station';
+
+  @override
+  String get deleteStationTitle => 'Delete station';
+
+  @override
+  String get deleteStationMessage =>
+      'Are you sure you want to delete this station?';
 }

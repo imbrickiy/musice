@@ -18,5 +18,17 @@
   "ok": "ОК",
   "settings": "Настройки",
   "autoplayOnLaunch": "Автовоспроизведение при запуске",
-  "rememberLastStation": "Запоминать последнюю станцию"
+  "rememberLastStation": "Запоминать последнюю станцию",
+  "addStation": "Добавить станцию",
+  "requiredField": "Обязательное поле",
+  "invalidUrl": "Недействительный URL",
+  "stationName": "Название станции",
+  "stationUrl": "URL станции",
+  "cancel": "Отмена",
+  "save": "Сохранить",
+  "edit": "Редактировать",
+  "delete": "Удалить",
+  "editStation": "Редактировать станцию",
+  "deleteStationTitle": "Удалить станцию",
+  "deleteStationMessage": "Вы уверены, что хотите удалить эту станцию?"
 }

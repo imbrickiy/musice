@@ -18,5 +18,17 @@
   "ok": "OK",
   "settings": "Settings",
   "autoplayOnLaunch": "Autoplay on launch",
-  "rememberLastStation": "Remember last station"
+  "rememberLastStation": "Remember last station",
+  "addStation": "Add station",
+  "requiredField": "This field is required",
+  "invalidUrl": "Invalid URL",
+  "stationName": "Station name",
+  "stationUrl": "Station URL",
+  "cancel": "Cancel",
+  "save": "Save",
+  "edit": "Edit",
+  "delete": "Delete",
+  "editStation": "Edit station",
+  "deleteStationTitle": "Delete station",
+  "deleteStationMessage": "Are you sure you want to delete this station?"
 }

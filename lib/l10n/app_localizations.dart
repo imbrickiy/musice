@@ -211,6 +211,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remember last station'**
   String get rememberLastStation;
+
+  /// No description provided for @addStation.
+  ///
+  /// In en, this message translates to:
+  /// **'Add station'**
+  String get addStation;
+
+  /// No description provided for @requiredField.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get requiredField;
+
+  /// No description provided for @invalidUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid URL'**
+  String get invalidUrl;
+
+  /// No description provided for @stationName.
+  ///
+  /// In en, this message translates to:
+  /// **'Station name'**
+  String get stationName;
+
+  /// No description provided for @stationUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Station URL'**
+  String get stationUrl;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @editStation.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit station'**
+  String get editStation;
+
+  /// No description provided for @deleteStationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete station'**
+  String get deleteStationTitle;
+
+  /// No description provided for @deleteStationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this station?'**
+  String get deleteStationMessage;
 }
 
 class _AppLocalizationsDelegate

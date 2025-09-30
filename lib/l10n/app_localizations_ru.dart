@@ -64,4 +64,41 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get rememberLastStation => 'Запоминать последнюю станцию';
+
+  @override
+  String get addStation => 'Добавить станцию';
+
+  @override
+  String get requiredField => 'Обязательное поле';
+
+  @override
+  String get invalidUrl => 'Недействительный URL';
+
+  @override
+  String get stationName => 'Название станции';
+
+  @override
+  String get stationUrl => 'URL станции';
+
+  @override
+  String get cancel => 'Отмена';
+
+  @override
+  String get save => 'Сохранить';
+
+  @override
+  String get edit => 'Редактировать';
+
+  @override
+  String get delete => 'Удалить';
+
+  @override
+  String get editStation => 'Редактировать станцию';
+
+  @override
+  String get deleteStationTitle => 'Удалить станцию';
+
+  @override
+  String get deleteStationMessage =>
+      'Вы уверены, что хотите удалить эту станцию?';
 }
