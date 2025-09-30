@@ -35,6 +35,15 @@ class AboutSheet extends StatelessWidget {
                   height: 1.25,
                 ),
               ),
+              const SizedBox(height: 6),
+              Text(
+                'Только потоковое воспроизведение — загрузка/сохранение аудио не поддерживается.',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: Colors.white54,
+                  height: 1.25,
+                ),
+              ),
               const SizedBox(height: 8),
               Center(
                 child: Text(
