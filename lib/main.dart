@@ -170,35 +170,52 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+
+    final media = MediaQuery.of(context);
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // App name / logo placeholder
-              Text(
-                kAppName,
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.5,
-                ),
-              ),
-              const SizedBox(height: 16),
-              // Loader indicator
-              const SizedBox(
-                width: 28,
-                height: 28,
-                child: CircularProgressIndicator(
-                  strokeWidth: 3,
-                  valueColor: AlwaysStoppedAnimation<Color>(kIconColor),
-                ),
-              ),
-            ],
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Background image
+          Image.asset(
+            'lib/assets/splash.png',
+            width: media.size.width,
+            height: media.size.height,
+            fit: BoxFit.cover,
+            alignment: Alignment.center,
+            errorBuilder: (_, _, _) => Container(color: Colors.black),
           ),
-        ),
+          // Slight dark overlay to keep content readable on bright images
+          Container(color: Colors.black.withValues(alpha: .35)),
+          SafeArea(
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // App name / logo placeholder
+                  // Text(
+                  //   kAppName,
+                  //   style: theme.textTheme.headlineSmall?.copyWith(
+                  //     color: Colors.white,
+                  //     fontWeight: FontWeight.w700,
+                  //     letterSpacing: 0.5,
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 16),
+                  // Loader indicator
+                  const SizedBox(
+                    width: 28,
+                    height: 28,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      valueColor: AlwaysStoppedAnimation<Color>(kIconColor),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
