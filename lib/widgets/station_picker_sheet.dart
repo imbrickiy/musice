@@ -60,11 +60,9 @@ class StationPickerSheet extends StatelessWidget {
                       child: IconButton(
                         icon: const Icon(AppIcons.add, color: kIconColor),
                         onPressed: () async {
-                          final navigator = Navigator.of(context);
-                          final added = await provider.manageAddStation(context);
-                          if (added != null) {
-                            navigator.pop(added);
-                          }
+                          await provider.manageAddStation(context);
+                          // Do not close or auto-select; let user tap a station explicitly
+                          // The list will refresh via provider.watch
                         },
                       ),
                     ),

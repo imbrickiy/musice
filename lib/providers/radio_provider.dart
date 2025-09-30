@@ -11,6 +11,7 @@ import 'package:musice/services/station_storage.dart';
 import 'package:musice/services/default_stations_service.dart';
 import 'package:musice/l10n/app_localizations.dart';
 import 'package:musice/widgets/add_station_sheet.dart';
+import 'package:musice/services/ui_overlays.dart';
 
 class PlaybackError {
   final String details;
@@ -272,8 +273,9 @@ class RadioProvider with ChangeNotifier {
 
   // UI-related actions
   Future<Station?> manageAddStation(BuildContext context) async {
-    final station = await showModalBottomSheet<Station>(
+    final station = await showAutoDismissBottomSheet<Station>(
       context: context,
+      builder: (ctx) => const AddStationSheet(),
       backgroundColor: Colors.black,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -281,19 +283,19 @@ class RadioProvider with ChangeNotifier {
           top: Radius.circular(kDefaultRadius),
         ),
       ),
-      builder: (ctx) => const AddStationSheet(),
     );
     if (station != null) {
       _addOrUpdateStation(station);
-      selectStation(station);
+      // Do not auto-select/play on add to avoid playback error popups
       return station;
     }
     return null;
   }
 
   Future<void> manageEditStation(BuildContext context, Station original) async {
-    final updated = await showModalBottomSheet<Station>(
+    final updated = await showAutoDismissBottomSheet<Station>(
       context: context,
+      builder: (ctx) => AddStationSheet(initial: original),
       backgroundColor: Colors.black,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -301,7 +303,6 @@ class RadioProvider with ChangeNotifier {
           top: Radius.circular(kDefaultRadius),
         ),
       ),
-      builder: (ctx) => AddStationSheet(initial: original),
     );
     if (updated != null) {
       _addOrUpdateStation(updated, originalName: original.name);
@@ -310,7 +311,7 @@ class RadioProvider with ChangeNotifier {
 
   Future<void> manageDeleteStation(BuildContext context, Station station) async {
     final l10n = AppLocalizations.of(context)!;
-    final confirm = await showDialog<bool>(
+    final confirm = await showAutoDismissDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: Colors.black,
