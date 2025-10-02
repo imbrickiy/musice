@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Deep",
+    "url": "https://hls-01-radiorecord.hostingradio.ru/record-deep/playlist.m3u8"
+  },
+  {
+    "name": "Chill-Out",
+    "url": "https://hls-01-radiorecord.hostingradio.ru/record-chil/playlist.m3u8"
+  },
+  {
+    "name": "Ambient",
+    "url": "https://hls-01-radiorecord.hostingradio.ru/record-ambient/playlist.m3u8"
+  },
+  {
+    "name": "Power Deep",
+    "url": "https://listen.powerapp.com.tr/powerdeep/abr/playlist.m3u8"
+  },
+  {
+    "name": "Business FM SPb",
+    "url": "https://bfmreg.hostingradio.ru/spb.bfm128.mp3"
+  },
+  {
+    "name": "Business FM",
+    "url": "https://bfm.hostingradio.ru/bfm256.mp3"
+  }
+]

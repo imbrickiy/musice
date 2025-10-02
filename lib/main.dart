@@ -18,6 +18,7 @@ import 'package:musice/settings/settings_controller.dart';
 import 'package:musice/widgets/settings_sheet.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:musice/widgets/splash_screen.dart';
 
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -141,82 +142,9 @@ class RadioApp extends StatelessWidget {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           locale: locale,
-          home: const SplashScreen(),
+          home: SplashScreen(nextPageBuilder: (_) => const RadioScope()),
         );
       },
-    );
-  }
-}
-
-// Simple splash/loader screen shown at app startup
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    // Small delay to show the loader, then navigate to the home page
-    Future<void>.delayed(kSplashDuration, () {
-      if (!mounted) return;
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => const RadioScope()));
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    final media = MediaQuery.of(context);
-    return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          // Background image
-          Image.asset(
-            'lib/assets/splash.png',
-            width: media.size.width,
-            height: media.size.height,
-            fit: BoxFit.cover,
-            alignment: Alignment.center,
-            errorBuilder: (_, _, _) => Container(color: Colors.black),
-          ),
-          // Slight dark overlay to keep content readable on bright images
-          Container(color: Colors.black.withValues(alpha: .35)),
-          SafeArea(
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // App name / logo placeholder
-                  // Text(
-                  //   kAppName,
-                  //   style: theme.textTheme.headlineSmall?.copyWith(
-                  //     color: Colors.white,
-                  //     fontWeight: FontWeight.w700,
-                  //     letterSpacing: 0.5,
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 16),
-                  // Loader indicator
-                  const SizedBox(
-                    width: 28,
-                    height: 28,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 3,
-                      valueColor: AlwaysStoppedAnimation<Color>(kIconColor),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -6,6 +6,9 @@ import 'package:musice/icons/app_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:musice/providers/radio_provider.dart';
 
+// Single place enum for station actions in the popup menu
+enum _StationAction { edit, delete }
+
 class StationPickerSheet extends StatelessWidget {
   const StationPickerSheet({super.key});
 
@@ -84,15 +87,33 @@ class StationPickerSheet extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           if (selected) const Icon(AppIcons.check, color: kIconColor),
-                          IconButton(
+                          if (selected) const SizedBox(width: 16),
+                          PopupMenuButton<_StationAction>(
                             tooltip: l10n.edit,
                             icon: const Icon(AppIcons.edit, color: kIconColor),
-                            onPressed: () => provider.manageEditStation(context, s),
-                          ),
-                          IconButton(
-                            tooltip: l10n.delete,
-                            icon: const Icon(AppIcons.delete, color: Colors.redAccent),
-                            onPressed: () => provider.manageDeleteStation(context, s),
+                            onSelected: (action) async {
+                              switch (action) {
+                                case _StationAction.edit:
+                                  await provider.manageEditStation(context, s);
+                                  break;
+                                case _StationAction.delete:
+                                  await provider.manageDeleteStation(context, s);
+                                  break;
+                              }
+                            },
+                            itemBuilder: (ctx) => [
+                              PopupMenuItem<_StationAction>(
+                                value: _StationAction.edit,
+                                child: Text(l10n.edit),
+                              ),
+                              PopupMenuItem<_StationAction>(
+                                value: _StationAction.delete,
+                                child: Text(
+                                  l10n.delete,
+                                  style: const TextStyle(color: Colors.redAccent),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       );
