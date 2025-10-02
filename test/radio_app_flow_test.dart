@@ -10,9 +10,9 @@ class FakeRadioProvider extends ChangeNotifier {
   final List<Station> _stations;
   Station? _selected;
   bool _isPlaying = false;
-  bool _isLoading = false;
+  final bool _isLoading = false;
   double _volume = 0.5;
-  double _reactive = 0.0;
+  final double _reactive = 0.0;
 
   FakeRadioProvider(List<Station> stations)
       : _stations = List<Station>.from(stations) {

@@ -69,7 +69,7 @@ Future<T?> showAutoDismissDialog<T>({
 class _AutoDismiss extends StatefulWidget {
   final Duration duration;
   final Widget child;
-  const _AutoDismiss({super.key, required this.duration, required this.child});
+  const _AutoDismiss({required this.duration, required this.child});
 
   @override
   State<_AutoDismiss> createState() => _AutoDismissState();

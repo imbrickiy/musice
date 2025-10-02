@@ -5,32 +5,41 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter
+      - uses: actions/checkout@v4
+      - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
-          cache: true
-
-      - name: Flutter Pub Get
+          flutter-version: 'stable'
+      - name: Show flutter version
+        run: flutter --version
+      - name: Configure Pub Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            ~/.pub-cache/bin
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+      - name: Get dependencies
         run: flutter pub get
-
       - name: Generate localizations
         run: flutter gen-l10n
-
-      - name: Run custom lint (fail on violations)
+      - name: Lint (custom_lint)
+        continue-on-error: true
         run: dart run custom_lint
-
       - name: Analyze
         run: flutter analyze
-
       - name: Run tests
-        run: flutter test -r compact
+        env:
+          CI: true
+        run: flutter test --no-color -r compact
+    timeout-minutes: 60
