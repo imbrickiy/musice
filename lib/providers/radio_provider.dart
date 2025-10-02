@@ -22,7 +22,7 @@ class PlaybackError {
 class RadioProvider with ChangeNotifier {
   static const _prefsKeyLastStation = 'last_station_name';
 
-  final AudioPlayer _player = AudioPlayer();
+  late final AudioPlayer _player;
   // Начинаем с пустого списка, станции загружаются асинхронно
   final List<Station> _stations = <Station>[];
   List<Station> _defaultStations = <Station>[];
@@ -36,7 +36,18 @@ class RadioProvider with ChangeNotifier {
 
   late final AnimationController _reactCtrl;
 
-  RadioProvider(TickerProvider vsync) {
+  /// Creates a RadioProvider.
+  ///
+  /// Optional [audioPlayer] can be injected for testing. Optional
+  /// [initialDefaultStations] seeds built-in stations synchronously which
+  /// avoids relying on asset loading during tests.
+  RadioProvider(
+    TickerProvider vsync, {
+    AudioPlayer? audioPlayer,
+    List<Station>? initialDefaultStations,
+  }) {
+    _player = audioPlayer ?? AudioPlayer();
+
     _player.setVolume(_volume);
     _reactCtrl = AnimationController(vsync: vsync, duration: kReactionDuration)
       ..addListener(() {
@@ -55,6 +66,18 @@ class RadioProvider with ChangeNotifier {
       notifyListeners();
     });
 
+    // Seed synchronously from provided initialDefaultStations or service fallback
+    if (initialDefaultStations != null && initialDefaultStations.isNotEmpty) {
+      _defaultStations = List<Station>.from(initialDefaultStations);
+      _stations.addAll(_defaultStations);
+      _selected ??= _stations.isNotEmpty ? _stations.first : null;
+    } else {
+      final initial = DefaultStationsService.instance.defaultOrFallbackSync;
+      _defaultStations = List<Station>.from(initial);
+      _stations.addAll(_defaultStations);
+      _selected ??= _stations.isNotEmpty ? _stations.first : null;
+    }
+
     // Загружаем станции асинхронно
     _initAsync();
   }
@@ -68,8 +91,11 @@ class RadioProvider with ChangeNotifier {
   Future<void> _loadDefaultStations() async {
     try {
       _defaultStations = await DefaultStationsService.instance.loadDefaultStations();
-      _stations.addAll(_defaultStations);
-      _selected ??= _stations.isNotEmpty ? _stations.first : null;
+      // Merge only if stations list was empty to avoid duplicates when seeded
+      if (_stations.isEmpty) {
+        _stations.addAll(_defaultStations);
+        _selected ??= _stations.isNotEmpty ? _stations.first : null;
+      }
       notifyListeners();
     } catch (_) {
       // ignore
@@ -184,7 +210,7 @@ class RadioProvider with ChangeNotifier {
           id: url,
           title: station?.name ?? 'Radio',
           artist: 'Live Radio',
-          artUri: Uri.parse('asset:///lib/assets/screenshot_1.png'),
+          artUri: Uri.parse('asset:///lib/assets/splash.png'),
           extras: const {'isLiveStream': true},
         ),
       );
