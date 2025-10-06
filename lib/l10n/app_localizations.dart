@@ -283,6 +283,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to delete this station?'**
   String get deleteStationMessage;
+
+  /// No description provided for @nextStationTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get nextStationTooltip;
+
+  /// No description provided for @nextStationSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Next station'**
+  String get nextStationSemantics;
+
+  /// No description provided for @autoplayOnSwitch.
+  ///
+  /// In en, this message translates to:
+  /// **'Autoplay on station switch'**
+  String get autoplayOnSwitch;
+
+  /// No description provided for @keepPlayingOnSwitch.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep playing when switching'**
+  String get keepPlayingOnSwitch;
+
+  /// No description provided for @playback.
+  ///
+  /// In en, this message translates to:
+  /// **'Playback'**
+  String get playback;
 }
 
 class _AppLocalizationsDelegate

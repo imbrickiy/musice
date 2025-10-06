@@ -101,4 +101,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get deleteStationMessage =>
       'Are you sure you want to delete this station?';
+
+  @override
+  String get nextStationTooltip => 'Next';
+
+  @override
+  String get nextStationSemantics => 'Next station';
+
+  @override
+  String get autoplayOnSwitch => 'Autoplay on station switch';
+
+  @override
+  String get keepPlayingOnSwitch => 'Keep playing when switching';
+
+  @override
+  String get playback => 'Playback';
 }

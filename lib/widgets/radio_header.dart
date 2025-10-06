@@ -6,11 +6,22 @@ import 'package:musice/icons/app_icons.dart';
 class RadioHeader extends StatelessWidget {
   final VoidCallback onStationsTap;
   final VoidCallback? onSettingsTap;
-  const RadioHeader({super.key, required this.onStationsTap, this.onSettingsTap});
+  final VoidCallback? onNextTap;
+  final bool? isNextEnabled;
+  const RadioHeader({
+    super.key,
+    required this.onStationsTap,
+    this.onSettingsTap,
+    this.onNextTap,
+    this.isNextEnabled,
+  });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final nextEnabled = (isNextEnabled ?? true) && onNextTap != null;
+    final nextColor = nextEnabled ? kIconColor : kIconColor.withOpacity(0.4);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: kHeaderHPad, vertical: kHeaderVPad),
       child: Row(
@@ -40,6 +51,30 @@ class RadioHeader extends StatelessWidget {
           ),
           Row(
             children: [
+              if (onNextTap != null)
+                Material(
+                  type: MaterialType.transparency,
+                  child: Tooltip(
+                    message: l10n.nextStationTooltip,
+                    child: Semantics(
+                      button: true,
+                      enabled: nextEnabled,
+                      label: l10n.nextStationSemantics,
+                      child: InkWell(
+                        key: const Key('nextButton'),
+                        customBorder: const CircleBorder(),
+                        onTap: nextEnabled ? onNextTap : null,
+                        child: SizedBox(
+                          width: kHeaderButtonSize,
+                          height: kHeaderButtonSize,
+                          child: Center(
+                            child: Icon(AppIcons.next, size: kHeaderIconSize, color: nextColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               if (onSettingsTap != null)
                 Material(
                   type: MaterialType.transparency,

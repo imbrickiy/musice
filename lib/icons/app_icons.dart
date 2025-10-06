@@ -7,6 +7,7 @@ class AppIcons {
   // Media controls
   static const IconData play = Icons.play_arrow;
   static const IconData pause = Icons.pause;
+  static const IconData next = Icons.skip_next;
 
   // UI symbols
   static const IconData podcasts = Icons.podcasts;

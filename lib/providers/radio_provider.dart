@@ -12,6 +12,7 @@ import 'package:musice/services/default_stations_service.dart';
 import 'package:musice/l10n/app_localizations.dart';
 import 'package:musice/widgets/add_station_sheet.dart';
 import 'package:musice/services/ui_overlays.dart';
+import 'package:musice/services/artwork_cache.dart';
 
 class PlaybackError {
   final String details;
@@ -147,6 +148,13 @@ class RadioProvider with ChangeNotifier {
       _lastPlayerState?.processingState == ProcessingState.loading ||
       _lastPlayerState?.processingState == ProcessingState.buffering;
 
+  int get _selectedIndex =>
+      _selected == null ? -1 : _stations.indexWhere((s) => s.name == _selected!.name);
+
+  /// True when there is a next station without wrap-around
+  bool get canGoNext =>
+      _stations.length > 1 && _selectedIndex >= 0 && _selectedIndex < _stations.length - 1;
+
   PlaybackError? takeError() {
     final err = _lastError;
     _lastError = null;
@@ -176,7 +184,24 @@ class RadioProvider with ChangeNotifier {
   void selectStation(Station station) {
     _selected = station;
     _persistSelectedIfNeeded();
-    _startStationWithBackoff(station.url);
+    final keepPlaying = SettingsController.instance.keepPlayingOnSwitch.value;
+    final autoOnSwitch = SettingsController.instance.autoplayOnSwitch.value;
+    bool shouldAutoplay;
+    if (keepPlaying) {
+      shouldAutoplay = autoOnSwitch || isPlaying;
+    } else {
+      shouldAutoplay = autoOnSwitch;
+    }
+
+    if (shouldAutoplay) {
+      _startStationWithBackoff(station.url);
+    } else {
+      if (isPlaying) {
+        _cancelBackoff();
+        // ignore: discarded_futures
+        _player.stop();
+      }
+    }
     notifyListeners();
   }
 
@@ -204,13 +229,14 @@ class RadioProvider with ChangeNotifier {
     try {
       await _player.stop();
       final station = _selected;
+      final artUri = await ArtworkCache.instance.getDefaultArtworkUri();
       final source = AudioSource.uri(
         Uri.parse(url),
         tag: MediaItem(
           id: url,
           title: station?.name ?? 'Radio',
           artist: 'Live Radio',
-          artUri: Uri.parse('asset:///lib/assets/splash.png'),
+          artUri: artUri,
           extras: const {'isLiveStream': true},
         ),
       );
@@ -406,6 +432,28 @@ class RadioProvider with ChangeNotifier {
       _persistSelectedIfNeeded();
     }
     notifyListeners();
+  }
+
+  /// Переключиться на следующую станцию по кругу и начать воспроизведение
+  void nextStation() {
+    if (_stations.isEmpty) return;
+    if (_selected == null) {
+      selectStation(_stations.first);
+      return;
+    }
+    final currentIndex = _stations.indexWhere((s) => s.name == _selected!.name);
+    final nextIndex = currentIndex < 0
+        ? 0
+        : (currentIndex + 1) % _stations.length;
+    selectStation(_stations[nextIndex]);
+  }
+
+  /// Переключиться на следующую станцию БЕЗ зацикливания, если она существует
+  void nextStationLinear() {
+    final idx = _selectedIndex;
+    if (idx >= 0 && idx < _stations.length - 1) {
+      selectStation(_stations[idx + 1]);
+    }
   }
 
   @override

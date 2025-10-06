@@ -30,5 +30,10 @@
   "delete": "Удалить",
   "editStation": "Редактировать станцию",
   "deleteStationTitle": "Удалить станцию",
-  "deleteStationMessage": "Вы уверены, что хотите удалить эту станцию?"
+  "deleteStationMessage": "Вы уверены, что хотите удалить эту станцию?",
+  "nextStationTooltip": "Далее",
+  "nextStationSemantics": "Следующая станция",
+  "autoplayOnSwitch": "Автовоспроизведение при переключении",
+  "keepPlayingOnSwitch": "Продолжать проигрывание при переключении",
+  "playback": "Воспроизведение"
 }

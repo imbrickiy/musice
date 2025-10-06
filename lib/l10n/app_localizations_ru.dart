@@ -101,4 +101,19 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get deleteStationMessage =>
       'Вы уверены, что хотите удалить эту станцию?';
+
+  @override
+  String get nextStationTooltip => 'Далее';
+
+  @override
+  String get nextStationSemantics => 'Следующая станция';
+
+  @override
+  String get autoplayOnSwitch => 'Автовоспроизведение при переключении';
+
+  @override
+  String get keepPlayingOnSwitch => 'Продолжать проигрывание при переключении';
+
+  @override
+  String get playback => 'Воспроизведение';
 }

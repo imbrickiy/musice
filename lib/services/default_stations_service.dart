@@ -27,11 +27,13 @@ class DefaultStationsService {
       final jsonString = await rootBundle.loadString('assets/default_stations.json');
       final List<dynamic> jsonList = jsonDecode(jsonString);
 
-      _cachedStations = jsonList
+      final parsed = jsonList
           .map((json) => Station.fromJson(Map<String, dynamic>.from(json)))
           .where((station) => station.name.trim().isNotEmpty && station.url.trim().isNotEmpty)
           .toList();
 
+      // If asset exists but is empty or filtered result is empty, use fallback
+      _cachedStations = parsed.isEmpty ? List<Station>.from(_fallback) : parsed;
       return _cachedStations!;
     } catch (e) {
       // If assets are not available (e.g., in tests), fall back to a built-in set

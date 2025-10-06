@@ -32,6 +32,19 @@ class FakeRadioProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void nextStation() {
+    if (_stations.isEmpty) return;
+    if (_selected == null) {
+      _selected = _stations.first;
+      notifyListeners();
+      return;
+    }
+    final idx = _stations.indexWhere((s) => s.name == _selected!.name);
+    final nextIndex = idx < 0 ? 0 : (idx + 1) % _stations.length;
+    _selected = _stations[nextIndex];
+    notifyListeners();
+  }
+
   Future<void> play() async {
     _isPlaying = true;
     notifyListeners();
@@ -49,7 +62,7 @@ class FakeRadioProvider extends ChangeNotifier {
 }
 
 void main() {
-  testWidgets('Radio flow with fake provider: select station and play', (tester) async {
+  testWidgets('Radio flow with fake provider: select, play, and next', (tester) async {
     final stations = [
       const Station('Deep', 'https://example.com/deep.m3u8'),
       const Station('Chill-Out', 'https://example.com/chill.m3u8'),
@@ -66,7 +79,7 @@ void main() {
           child: Scaffold(
             body: Column(
               children: [
-                RadioHeader(onStationsTap: () {}, onSettingsTap: null),
+                RadioHeader(onStationsTap: () {}, onSettingsTap: null, onNextTap: provider.nextStation),
                 // Show current station name
                 Builder(builder: (ctx) {
                   final p = ctx.watch<FakeRadioProvider>();
@@ -92,14 +105,17 @@ void main() {
     // initial station shown
     expect(find.text('Deep'), findsOneWidget);
 
-    // Simulate user selecting Chill-Out via provider (avoid pumping StationPickerSheet)
-    provider.selectStation(stations[1]);
+    // tap Next -> should move to Chill-Out
+    await tester.tap(find.byKey(const Key('nextButton')));
     await tester.pumpAndSettle();
-
-    // selection reflected in UI
     expect(find.text('Chill-Out'), findsOneWidget);
 
-    // test play/pause
+    // wrap-around
+    await tester.tap(find.byKey(const Key('nextButton')));
+    await tester.pumpAndSettle();
+    expect(find.text('Deep'), findsOneWidget);
+
+    // test play
     expect(provider.isPlaying, isFalse);
     await tester.tap(find.byIcon(Icons.play_arrow));
     await tester.pumpAndSettle();

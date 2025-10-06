@@ -343,6 +343,7 @@ class _RadioHomePageState extends State<RadioHomePage> {
             RadioHeader(
               onStationsTap: _showStationPicker,
               onSettingsTap: _showSettings,
+              onNextTap: p.nextStation,
             ),
             Text(
               p.selected?.name ?? l10n.selectStation,

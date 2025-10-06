@@ -112,6 +112,16 @@ class SettingsSheet extends StatelessWidget {
                   padding: EdgeInsets.only(top: 8),
                   child: Divider(color: kSheetDividerColor),
                 ),
+                // Playback section
+                Padding(
+                  padding: kSheetTitlePadding.copyWith(top: 12, bottom: 8),
+                  child: Text(
+                    l10n.playback,
+                    style: kSheetListTileTextStyle.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
 
                 // Toggles
                 ValueListenableBuilder<bool>(
@@ -141,6 +151,36 @@ class SettingsSheet extends StatelessWidget {
                     value: value,
                     onChanged: (v) =>
                         SettingsController.instance.setRememberLastStation(v),
+                  ),
+                ),
+                ValueListenableBuilder<bool>(
+                  valueListenable:
+                      SettingsController.instance.autoplayOnSwitch,
+                  builder: (context, value, _) => SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    dense: true,
+                    title: Text(
+                      l10n.autoplayOnSwitch,
+                      style: kSheetListTileTextStyle,
+                    ),
+                    value: value,
+                    onChanged: (v) =>
+                        SettingsController.instance.setAutoplayOnSwitch(v),
+                  ),
+                ),
+                ValueListenableBuilder<bool>(
+                  valueListenable:
+                      SettingsController.instance.keepPlayingOnSwitch,
+                  builder: (context, value, _) => SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    dense: true,
+                    title: Text(
+                      l10n.keepPlayingOnSwitch,
+                      style: kSheetListTileTextStyle,
+                    ),
+                    value: value,
+                    onChanged: (v) =>
+                        SettingsController.instance.setKeepPlayingOnSwitch(v),
                   ),
                 ),
                 const SizedBox(height: 12),
